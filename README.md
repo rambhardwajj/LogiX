@@ -82,3 +82,37 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.com/docs/reference/configuration)
 - [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+
+
+TurboRepo setup steps: 
+- Create a new Turborepo project using the following command: `npx create-turbo
+- Install the required packages using the following command: `pnpm install`
+- Configure the Turborepo by creating a `turbo.json` file in the root of
+- Run the following command to start the development server: `pnpm dev`
+
+Project Setup 
+- Under packages create different folders for different packages
+- In each folder do pnpm init and tsc -init 
+- In each folder configure tsconfig.json file and a package.json file
+- In tsconfig - extend the base configuration and add the path to the typescript-config.json file of the parent folder
+    {
+    "extends": "@repo/typescript-config/base.json"
+    }
+- In package.json add the following 
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*"
+    },
+
+    "exports": {
+        ".": "./src/index.ts"
+    },
+
+     "type": "module",
+
+- If you are using module from differnet packages add the following:
+      "@repo/utils": "workspace:*",
+
+- Create all the packages 
+
+
+    

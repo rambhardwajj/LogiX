@@ -1,0 +1,24 @@
+{
+  "name": "@repo/zod",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "@repo/utils": "workspace:*",
+    "dotenv": "^16.5.0",
+    "zod": "^3.25.67"
+  }
+}
