@@ -2,6 +2,7 @@ import { configDotenv } from "dotenv";
 import { connectDrizzle } from "@repo/drizzle";
 import { env } from "@repo/zod";
 import {logger} from "@repo/utils"
+import app from "./app";
 
 configDotenv();
 console.log(env);
@@ -19,3 +20,7 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+app.listen(env.PORT, () => {
+  console.log("Server listening on " , env.PORT)
+})

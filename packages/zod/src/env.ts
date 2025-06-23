@@ -1,37 +1,46 @@
 import { z } from "zod";
 import { logger } from "@repo/utils";
-import {config } from "dotenv"
 import path from "path";
+import { config } from "dotenv";
 
-config( { path: path.join(process.cwd() , ".env") } );
+enum NodeEnv {
+  Development = "development",
+  Production = "production",
+}
 
-export const envSchema = z.object({
+config({ path: path.join(process.cwd(), ".env") });
 
-  DATABASE_URL: z.string(),
+const envSchema = z.object({
+  PORT: validNumber("PORT"),
+  DATABASE_URL: validURL("DATABASE_URL"),
+  // ACCESS_TOKEN_SECRET: nonEmptyString("ACCESS_TOKEN_SECRET"),
+  // ACCESS_TOKEN_EXPIRY: nonEmptyString("ACCESS_TOKEN_EXPIRY"),
+  // REFRESH_TOKEN_SECRET: nonEmptyString("REFRESH_TOKEN_SECRET"),
+  // REFRESH_TOKEN_EXPIRY: nonEmptyString("REFRESH_TOKEN_EXPIRY"),
+  // REFRESH_TOKEN_EXPIRY_REMEMBER_ME: nonEmptyString(
+  //   "REFRESH_TOKEN_EXPIRY_REMEMBER_ME"
+  // ),
 
-  // MAILTRAP_SMTP_HOST: z.string().min(1, "MAILTRAP_SMTP_HOST is required"),
-  // MAILTRAP_SMTP_PORT: z.coerce.number().int().positive(),
-  
-  // MAILTRAP_SMTP_USER: z.string().min(1),
-  // MAILTRAP_SMTP_PASS: z.string().min(1),
+  // RESEND_API_KEY: nonEmptyString("RESEND_API_KEY"),
 
-  // MAIL_FROM: z.string().email("MAIL_FROM must be a valid email"),
+  // CLOUDINARY_NAME: nonEmptyString("CLOUDINARY_NAME"),
+  // CLOUDINARY_API_KEY: nonEmptyString("CLOUDINARY_API_KEY"),
+  // CLOUDINARY_SECRET_KEY: nonEmptyString("CLOUDINARY_SECRET_KEY"),
 
-  // RESEND_API_KEY: z.string().min(1),
-  // MAX_ATTACHMENTS: z.coerce.number().int().nonnegative(),
+  // SERVER_URL: validURL("SERVER_URL"),
+  // CLIENT_URL: validURL("CLIENT_URL"),
 
-  // ACCESS_TOKEN_SECRET: z.string().min(1),
-  // REFRESH_TOKEN_SECRET: z.string().min(1),
+  // NODE_ENV: z.nativeEnum(NodeEnv, {
+  //   errorMap: () => {
+  //     return { message: "NODE_ENV must be 'development' or 'production" };
+  //   },
+  // }),
 
-  // CLOUDINARY_CLOUD_NAME: z.string().min(1),
-  // CLOUDINARY_API_KEY: z.string().min(1),
-  // CLOUDINARY_API_SECRET: z.string().min(1),
+  // GOOGLE_CLIENT_ID: nonEmptyString("GOOGLE_CLIENT_ID"),
+  // GEMINI_API_KEY: nonEmptyString("GEMINI_API_KEY"),
 
-  // JUDGE0_API_URL: z.string().url(),
-  // JUDGE0_API_KEY: z.string().min(1),
-
-  // GOOGLE_CLIENT_ID: z.string().min(1),
-  // GEMINI_API_KEY: z.string().min(1),
+  // JUDGE0_API_URL: nonEmptyString("JUDGE0_API_URL"),
+  // JUDGE0_API_KEY: nonEmptyString("JUDGE0_API_KEY"),
 });
 
 const createEnv = (env: NodeJS.ProcessEnv) => {
@@ -51,3 +60,30 @@ const createEnv = (env: NodeJS.ProcessEnv) => {
 
 export const env = createEnv(process.env);
 
+function validNumber(name: string) {
+  return z.preprocess(
+    (val) => Number(val),
+    z.number({
+      required_error: `${name} is required`,
+      invalid_type_error: `${name} must be a number`,
+    })
+  );
+}
+
+function validURL(name: string) {
+  return z
+    .string({
+      required_error: `${name} is required`,
+      invalid_type_error: `${name} must be a valid URL string`,
+    })
+    .url(`${name} must be a valid URL`);
+}
+
+function nonEmptyString(name: string) {
+  return z
+    .string({
+      required_error: `${name} is required`,
+      invalid_type_error: `${name} must be a string`,
+    })
+    .nonempty(`${name} cannot be empty`);
+}
