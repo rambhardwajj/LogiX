@@ -1,12 +1,13 @@
 import { integer, boolean , uuid, pgTable, text,pgEnum, timestamp } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
 import { AuthProvider, UserRole } from "@repo/utils"
+import { InferSelectModel } from "drizzle-orm";
 
 export const roleEnum = pgEnum('role', UserRole);
 export const providerEnum = pgEnum('provider', AuthProvider);
 
 
-export const user = pgTable("users", {
+export const users = pgTable("users", {
     id: uuid("id").defaultRandom().primaryKey() ,
     email: text("email").notNull(),
     password: text("password"),
@@ -27,3 +28,5 @@ export const user = pgTable("users", {
     emailVerificationExpiry : timestamp(),
     ...timestamps
 });
+
+export type User = InferSelectModel<typeof users>;

@@ -8,8 +8,8 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
-import { user } from "./user.schema";
-import { problem } from "./problem.schema";
+import { user } from "./user";
+import { problem } from "./problem";
 
 export const problemSolved = pgTable(
   "problems_solved",

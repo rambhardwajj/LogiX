@@ -1,17 +1,11 @@
 import {
   pgTable,
-  uuid,
-  text,
-  boolean,
-  json,
-  timestamp,
-  pgEnum
+  uuid
 } from "drizzle-orm/pg-core";
-import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
-import {user} from "./user.schema"
+import { timestamps } from "../helper"; 
 import { uniqueIndex } from "drizzle-orm/pg-core";
-import { playlist } from "./playlist.schema";
-import { problem } from "./problem.schema";
+import { playlist } from "./playlist";
+import { problem } from "./problem";
 
 
 export const problemInPlaylist = pgTable("problems_in_playlist", {

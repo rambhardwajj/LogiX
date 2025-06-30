@@ -3,12 +3,9 @@ import {
   uuid,
   text,
   boolean,
-  json,
-  timestamp,
-  pgEnum,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
-import { user } from "./user.schema";
+import { users } from "./user";
 import { uniqueIndex } from "drizzle-orm/pg-core";
 
 export const playlist = pgTable(
@@ -18,7 +15,7 @@ export const playlist = pgTable(
     name: text("name").notNull(),
     description: text("description"),
     userId: uuid("user_id")
-      .references(() => user.id, { onDelete: "cascade" })
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
 
     visibilty: boolean("visibilty").default(false),

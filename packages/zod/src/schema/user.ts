@@ -77,3 +77,4 @@ export const validateChangePassword = (data: unknown) => {
 export const validateResetPassword = (data: unknown) => {
   return resetPasswordSchema.safeParse(data);
 };
+

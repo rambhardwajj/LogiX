@@ -8,7 +8,7 @@ import {
   pgEnum
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
-import {user} from "./user.schema"
+import {user} from "./user"
 import { Difficulty } from "@repo/utils";
 
 export const difficultyEnum = pgEnum("difficulty", Difficulty);

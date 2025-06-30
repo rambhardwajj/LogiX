@@ -2,7 +2,7 @@ import {
   pgTable,index,  uuid, text, integer, boolean, json, timestamp
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
-import { submission } from "./submission.schema";
+import { submission } from "./submission";
 
 export const testCaseResult = pgTable("test_case_results", {
   id: uuid("id").defaultRandom().primaryKey(),

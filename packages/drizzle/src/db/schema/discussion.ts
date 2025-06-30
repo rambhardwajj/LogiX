@@ -2,7 +2,7 @@ import { pgTable, uuid, text, integer, timestamp } from "drizzle-orm/pg-core";
 import { unique } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
 import { uniqueIndex } from "drizzle-orm/pg-core";
-import { user } from "./user.schema";
+import { user } from "./user";
 
 export const discussion = pgTable(
   "discussions",
