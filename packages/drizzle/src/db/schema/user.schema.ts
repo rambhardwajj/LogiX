@@ -1,8 +1,9 @@
 import { integer, boolean , uuid, pgTable, text,pgEnum, timestamp } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
+import { AuthProvider, UserRole } from "@repo/utils"
 
-export const roleEnum = pgEnum('role', ['USER', 'ADMIN']);
-export const providerEnum = pgEnum('provider', ['LOCAL', 'GOOGLE', 'GITHUB']);
+export const roleEnum = pgEnum('role', UserRole);
+export const providerEnum = pgEnum('provider', AuthProvider);
 
 
 export const user = pgTable("users", {

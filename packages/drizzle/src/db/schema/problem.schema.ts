@@ -1,5 +1,3 @@
-
-
 import {
   pgTable,
   uuid,
@@ -11,8 +9,9 @@ import {
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
 import {user} from "./user.schema"
+import { Difficulty } from "@repo/utils";
 
-export const difficultyEnum = pgEnum("difficulty", ["EASY", "MEDIUM", "HARD"]);
+export const difficultyEnum = pgEnum("difficulty", Difficulty);
 
 export const problem = pgTable("problems", {
   id: uuid("id").defaultRandom().primaryKey(),
