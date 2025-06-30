@@ -41,30 +41,41 @@ export const problemSchema = z.object({
   ),
 
   constraints: z.array(z.string()),
+
   hints: z.array(z.string()),
 
-  editorial: jsonSchema,
+  editorial: jsonSchema.optional(),
 
   testcases: testcaseSchema.nonempty({
     message: "At least one test case is required",
   }),
 
-  codeSnippets: z.array(
-    z.object({
-      language: z.string(),
-      snippet: z.string(),
-    })
-  ),
+  codeSnippets: z
+    .array(
+      z.object({
+        language: z.string({ message: "Snippet language is required" }),
+        snippet: z.string({ message: "Snippet code is required" }),
+      })
+    )
+    .nonempty({ message: "At least one code snippet is required" }),
 
-  referenceSolutions: z.array(
-    z.object({
-      language: z.string(),
-      solution: z.string(),
-    })
-  ),
+  referenceSolutions: z
+    .array(
+      z.object({
+        language: z.string({
+          message: "Reference solution language is required",
+        }),
+        solution: z.string({ message: "Reference solution code is required" }),
+      })
+    )
+    .nonempty({ message: "At least one reference solution is required" }),
+
+  demo: z.boolean().default(false),
 });
 
 export type Problem = z.infer<typeof problemSchema>;
+
+
 
 export const validateProblemData = (data: Problem) =>
   problemSchema.safeParse(data);

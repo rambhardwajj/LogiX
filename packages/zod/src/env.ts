@@ -3,7 +3,7 @@ import { logger } from "@repo/utils";
 import path from "path";
 import { config } from "dotenv";
 
-enum NodeEnv {
+export enum NodeEnv {
   Development = "development",
   Production = "production",
 }
