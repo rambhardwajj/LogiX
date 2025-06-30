@@ -96,7 +96,7 @@ Project Setup
 - In each folder configure tsconfig.json file and a package.json file
 - In tsconfig - extend the base configuration and add the path to the typescript-config.json file of the parent folder
     {
-    "extends": "@repo/typescript-config/base.json"
+        "extends": "@repo/typescript-config/base.json"
     }
 - In package.json add the following 
     "devDependencies": {
