@@ -3,7 +3,7 @@ import {
   uuid,
   text,
   boolean,
-  json,
+  jsonb,
   timestamp,
   pgEnum
 } from "drizzle-orm/pg-core";
@@ -17,21 +17,21 @@ export const problems = pgTable("problems", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").unique().notNull(),
   description: text("description").notNull(),
-  difficulty: difficultyEnum("difficulty").notNull(),
-
+  difficulty: difficultyEnum().notNull(),
   tags: text("tags").array().notNull(),
   demo: boolean("demo").default(false),
-  userId: uuid("user_id").references(()=> users.id , {onDelete: "cascade"}).notNull(),
-
-  examples: json("examples").notNull(),
-  constraints: text("constraints").notNull(),
-
-  hints: text("hints"),
-  editorial: text("editorial"),
-
-  testcases: json("testcases").notNull(),
-  codeSnippets: json("code_snippets").notNull(),
-  referenceSolutions: json("reference_solutions").notNull(),
+  createdBy: uuid("created_by")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
+  editorial: jsonb("editorial"),
+  examples: jsonb("examples").notNull(),
+  constraints: text("constraints").array().notNull(),
+  hints: text("hints").array().notNull(),
+  codeSnippets: jsonb("code_snippets").notNull(),
+  referenceSolutions: jsonb("reference_solutions").notNull(),
+  testcases: jsonb("testcases").notNull(),
 
   ...timestamps,
 });
