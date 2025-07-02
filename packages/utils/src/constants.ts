@@ -6,12 +6,13 @@ export const UserRole = {
 
 export const AuthProvider = {
     google: "GOOGLE",
+    github: "GITHUB",
     local: "LOCAL"
-}
+} as const
 
 
 export const Difficulty = {
     easy: 'EASY',
     medium: 'MEDIUM',
     hard: 'HARD'
-}
+} as const 

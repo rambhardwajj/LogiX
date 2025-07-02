@@ -8,20 +8,20 @@ import {
   pgEnum
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
-import {user} from "./user"
+import {users} from "./user"
 import { Difficulty } from "@repo/utils";
 
 export const difficultyEnum = pgEnum("difficulty", Difficulty);
 
-export const problem = pgTable("problems", {
+export const problems = pgTable("problems", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").unique().notNull(),
   description: text("description").notNull(),
   difficulty: difficultyEnum("difficulty").notNull(),
 
-  tags: text("tags").array().notNull().default([]),
+  tags: text("tags").array().notNull(),
   demo: boolean("demo").default(false),
-  userId: uuid("user_id").references(()=> user.id , {onDelete: "cascade"}).notNull(),
+  userId: uuid("user_id").references(()=> users.id , {onDelete: "cascade"}).notNull(),
 
   examples: json("examples").notNull(),
   constraints: text("constraints").notNull(),

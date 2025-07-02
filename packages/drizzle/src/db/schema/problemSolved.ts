@@ -8,15 +8,15 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
-import { user } from "./user";
-import { problem } from "./problem";
+import { users } from "./user";
+import { problems } from "./problem";
 
 export const problemSolved = pgTable(
   "problems_solved",
   {
     id: uuid("id").defaultRandom().primaryKey(),
-    userId: uuid("user_id").references(() => user.id, {onDelete: "cascade"}).notNull(),
-    problemId: uuid("problem_id").references(()=> problem.id, {onDelete: "cascade"}).notNull(),
+    userId: uuid("user_id").references(() => users.id, {onDelete: "cascade"}).notNull(),
+    problemId: uuid("problem_id").references(()=> problems.id, {onDelete: "cascade"}).notNull(),
 
     ...timestamps,
   },
