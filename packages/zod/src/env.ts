@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { logger } from "@repo/utils";
 import path from "path";
-import { config } from "dotenv";
+import { configDotenv } from "dotenv";
 
 export enum NodeEnv {
   Development = "development",
   Production = "production",
 }
 
-config({ path: path.join(process.cwd(), ".env") });
+configDotenv({ path: path.resolve(__dirname, "../../../.env") });
 
 const envSchema = z.object({
   PORT: validNumber("PORT"),
@@ -21,26 +21,31 @@ const envSchema = z.object({
     "REFRESH_TOKEN_EXPIRY_REMEMBER_ME"
   ),
 
-  // RESEND_API_KEY: nonEmptyString("RESEND_API_KEY"),
-
   CLOUDINARY_NAME: nonEmptyString("CLOUDINARY_NAME"),
   CLOUDINARY_API_KEY: nonEmptyString("CLOUDINARY_API_KEY"),
   CLOUDINARY_SECRET_KEY: nonEmptyString("CLOUDINARY_SECRET_KEY"),
 
-  // SERVER_URL: validURL("SERVER_URL"),
-  // CLIENT_URL: validURL("CLIENT_URL"),
+  SERVER_URL: validURL("SERVER_URL"),
+  CLIENT_URL: validURL("CLIENT_URL"),
 
-  // NODE_ENV: z.nativeEnum(NodeEnv, {
-  //   errorMap: () => {
-  //     return { message: "NODE_ENV must be 'development' or 'production" };
-  //   },
-  // }),
+  RESEND_API_KEY: nonEmptyString("RESEND_API_KEY"),
+
+  RESEND_SENDERMAIL: nonEmptyString("RESEND_SENDERMAIL"),
+
+  NODE_ENV: z.nativeEnum(NodeEnv, {
+    errorMap: () => {
+      return { message: "NODE_ENV must be 'development' or 'production" };
+    },
+  }),
 
   // GOOGLE_CLIENT_ID: nonEmptyString("GOOGLE_CLIENT_ID"),
   // GEMINI_API_KEY: nonEmptyString("GEMINI_API_KEY"),
 
   JUDGE0_API_URL: nonEmptyString("JUDGE0_API_URL"),
   JUDGE0_API_KEY: nonEmptyString("JUDGE0_API_KEY"),
+
+  REDIS_HOST: nonEmptyString("REDIS_HOST"),
+  REDIS_PORT : validNumber("PORT"),
 });
 
 const createEnv = (env: NodeJS.ProcessEnv) => {
