@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
     "@react-three/drei": "^10.4.2",
     "@react-three/fiber": "^9.1.4",
+    "@repo/ui": "workspace:*",
     "@tailwindcss/vite": "^4.1.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
