@@ -12,7 +12,7 @@ export const Navbar = () => {
             className="flex items-center space-x-2 font-bold text-xl"
           >
             <img src="logo.png" width={50} alt="" />
-            <span className="text-gray-900 hidden sm:block">LogiX</span>
+            <span className="text-violet-950 hidden sm:block">LogiX</span>
           </Link>
 
           {/* Center Nav Links */}
