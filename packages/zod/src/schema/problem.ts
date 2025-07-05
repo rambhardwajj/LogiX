@@ -4,8 +4,8 @@ import { jsonSchema } from "./jsonSchema";
 
 export const testcaseSchema = z.array(
   z.object({
-    input: z.string(),
-    output: z.string(),
+    input: z.string().nonempty({ message: "Test case input is required" }),
+    output: z.string().nonempty({ message: "Test case output is required" }),
   })
 );
 
@@ -14,35 +14,43 @@ export const problemSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Problem title must not be empty" })
-    .max(25, "Problem title must not exceed more than 50 characters"),
+    .max(50, "Problem title must not exceed 50 characters"),
 
   description: z
     .string()
     .trim()
-    .min(1, { message: "Problem description is required" })
+    .min(1, { message: "Problem description must not be empty" })
     .max(100, {
-      message: "Problem description must not exceed more than 100 characters",
+      message: "Problem description must not exceed 100 characters",
     }),
 
   difficulty: z.nativeEnum(Difficulty, {
     message: "Difficulty must be either EASY, MEDIUM or HARD",
   }),
 
+  demo: z.boolean().default(false),
+
   tags: z
-    .array(z.string())
+    .array(z.string().trim().min(1, "Tag must not be empty"))
     .nonempty({ message: "At least one tag is required" }),
 
-  examples: z.array(
-    z.object({
-      input: z.string(),
-      output: z.string(),
-      explanation: z.string().optional(),
-    })
-  ),
+  examples: z
+    .array(
+      z.object({
+        input: z.string({ message: "Example input is required" }),
+        output: z.string({ message: "Example output is required" }),
+        explanation: z.string().optional(),
+      })
+    )
+    .nonempty({ message: "At least one example is required" }),
 
-  constraints: z.array(z.string()),
+  constraints: z
+    .array(z.string({ message: "Constraint must be a string" }))
+    .nonempty({ message: "At least one constraint is required" }),
 
-  hints: z.array(z.string()),
+  hints: z
+    .array(z.string({ message: "Hint must be a string" }))
+    .nonempty({ message: "At least one hint is required" }),
 
   editorial: jsonSchema.optional(),
 
@@ -69,13 +77,14 @@ export const problemSchema = z.object({
       })
     )
     .nonempty({ message: "At least one reference solution is required" }),
-
-  demo: z.boolean().default(false),
 });
+
+export const updateProblemSchema = problemSchema.partial();
 
 export type Problem = z.infer<typeof problemSchema>;
 
-
-
-export const validateProblemData = (data: Problem) =>
+export const validateProblemData = (data: unknown) =>
   problemSchema.safeParse(data);
+
+export const validateUpdateProblemData = (data: unknown) =>
+  updateProblemSchema.safeParse(data);
