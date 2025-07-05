@@ -1,5 +1,12 @@
 import { ApiResponse, asyncHandler, CustomError, logger } from "@repo/utils";
-import { env, handleZodError, validateEmail, validateLogin, validateRegister } from "@repo/zod";
+import {
+  env,
+  handleZodError,
+  validateEmail,
+  validateLogin,
+  validateRegister,
+  validateResetPassword,
+} from "@repo/zod";
 import { and, db, eq, gt, users } from "@repo/drizzle";
 import { Request, RequestHandler, Response } from "express";
 import {
@@ -20,7 +27,10 @@ export const register: RequestHandler = asyncHandler(async (req, res) => {
 
   logger.info("Registration attempt", { email, ip: req.ip });
 
-  const [existingUser] = await db.select().from(users).where(eq(users.email, email))
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
 
   if (existingUser) {
     throw new CustomError(409, "Email is already registered");
@@ -29,17 +39,23 @@ export const register: RequestHandler = asyncHandler(async (req, res) => {
   const passwordHash = await hashPassword(password);
   const { unHashedToken, hashedToken, tokenExpiry } = generateToken();
 
-  const [user] = await db.insert(users).values({
-    email, passwordHash, fullname, verificationToken: unHashedToken, verificationTokenExpiry: tokenExpiry
-  })
-  .returning({
-   id: users.id,
-   email: users.email,
-   fullname: users.fullname,
-   avatar: users.avatar,
-   role: users.role,
-   isVerified: users.isVerified
-  })
+  const [user] = await db
+    .insert(users)
+    .values({
+      email,
+      passwordHash,
+      fullname,
+      verificationToken: unHashedToken,
+      verificationTokenExpiry: tokenExpiry,
+    })
+    .returning({
+      id: users.id,
+      email: users.email,
+      fullname: users.fullname,
+      avatar: users.avatar,
+      role: users.role,
+      isVerified: users.isVerified,
+    });
 
   if (!user) {
     logger.error("User insertion failed", { email });
@@ -81,8 +97,15 @@ export const verifyEmail: RequestHandler = asyncHandler(async (req, res) => {
   if (!token) throw new CustomError(400, "Verification token is required");
   const hashedToken = createHash(token);
 
-  const [user] = await db.select().from(users).where(and(eq(users.verificationToken, hashedToken), gt(users.verificationTokenExpiry, new Date())))
-    
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(
+      and(
+        eq(users.verificationToken, hashedToken),
+        gt(users.verificationTokenExpiry, new Date())
+      )
+    );
 
   if (!user) {
     throw new CustomError(
@@ -97,13 +120,14 @@ export const verifyEmail: RequestHandler = asyncHandler(async (req, res) => {
   const hashedRefreshToken = createHash(refreshToken);
 
   await db
-    .update(users).set({
+    .update(users)
+    .set({
       verificationToken: null,
       verificationTokenExpiry: null,
       isVerified: true,
       refreshToken: hashedRefreshToken,
     })
-    .where(eq(users.id, user.id))
+    .where(eq(users.id, user.id));
 
   logger.info("Email verified successfully", {
     email: user.email,
@@ -118,40 +142,47 @@ export const verifyEmail: RequestHandler = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Email verified successfully", null));
 });
 
-export const login:RequestHandler = asyncHandler(async (req:Request, res:Response )=>{
-  const { email, password, rememberMe } = handleZodError(validateLogin(req.body));
-  
-  const [user] = await db.select().from(users).where(eq(users.email, email))
+export const login: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { email, password, rememberMe } = handleZodError(
+      validateLogin(req.body)
+    );
 
-  if( !user) throw new CustomError(401, "Invalid email")
+    const [user] = await db.select().from(users).where(eq(users.email, email));
 
-  const isValidPassword = await passwordMatch(password, user.passwordHash! )
-  if (!isValidPassword) throw new CustomError(401, "Invalid credentials");
+    if (!user) throw new CustomError(401, "Invalid email");
 
-  const accessToken = generateAccessToken(user);
-  const refreshToken = generateRefreshToken(user);
-  const hashedRefreshToken = createHash(refreshToken);
+    const isValidPassword = await passwordMatch(password, user.passwordHash!);
+    if (!isValidPassword) throw new CustomError(401, "Invalid credentials");
 
-  await db
-    .update(users)
-    .set({
-      refreshToken: hashedRefreshToken,
-    })
-    .where(eq(users.id, user.id));
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    const hashedRefreshToken = createHash(refreshToken);
 
-  logger.info("User logged in successfully", {
-    email,
-    userId: user.id,
-    ip: req.ip,
-  });
+    await db
+      .update(users)
+      .set({
+        refreshToken: hashedRefreshToken,
+      })
+      .where(eq(users.id, user.id));
 
-  res
-    .status(200)
-    .cookie("accessToken", accessToken, generateCookieOptions())
-    .cookie("refreshToken", refreshToken, generateCookieOptions({ rememberMe }))
-    .json(new ApiResponse(200, "Logged in successfully", null));
+    logger.info("User logged in successfully", {
+      email,
+      userId: user.id,
+      ip: req.ip,
+    });
 
-})
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, generateCookieOptions())
+      .cookie(
+        "refreshToken",
+        refreshToken,
+        generateCookieOptions({ rememberMe })
+      )
+      .json(new ApiResponse(200, "Logged in successfully", null));
+  }
+);
 
 export const logout: RequestHandler = asyncHandler(async (req, res) => {
   const { refreshToken } = req.cookies;
@@ -194,19 +225,42 @@ export const resendVerificationEmail: RequestHandler = asyncHandler(
     const { email } = handleZodError(validateEmail(req.body));
     const [user] = await db.select().from(users).where(eq(users.email, email));
 
-    if (!user) throw new CustomError(401, "No account found with this email address");
-    if (user.isVerified) throw new CustomError(400, "Email is already verified");
-  
+    if (!user)
+      throw new CustomError(401, "No account found with this email address");
+    if (user.isVerified)
+      throw new CustomError(400, "Email is already verified");
+
     const { unHashedToken, hashedToken, tokenExpiry } = generateToken();
 
-    await db.update(users).set({verificationToken: hashedToken,verificationTokenExpiry: tokenExpiry,}).where(eq(users.email, email));
+    await db
+      .update(users)
+      .set({
+        verificationToken: hashedToken,
+        verificationTokenExpiry: tokenExpiry,
+      })
+      .where(eq(users.email, email));
 
     emailQueue.add("sendVerifyEmail", {
-      type: "verify", fullname: user.fullname, email: user.email, token: unHashedToken,
+      type: "verify",
+      fullname: user.fullname,
+      email: user.email,
+      token: unHashedToken,
     });
 
-    logger.info("Verification email resent", { email,  userId: user.id, ip: req.ip, });
-    res.status(200).json(new ApiResponse(200,"Verification mail sent successfully. Please check your inbox",null));
+    logger.info("Verification email resent", {
+      email,
+      userId: user.id,
+      ip: req.ip,
+    });
+    res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          "Verification mail sent successfully. Please check your inbox",
+          null
+        )
+      );
   }
 );
 
@@ -215,26 +269,25 @@ export const forgotPassword: RequestHandler = asyncHandler(async (req, res) => {
 
   const [user] = await db.select().from(users).where(eq(users.email, email));
 
-  if (!user) 
-    return res.status(200).json( new ApiResponse(200,"If an account exists, a reset link has been sent to the email", null ));
+  if (!user)
+    return res .status(200).json( new ApiResponse( 200, "If an account exists, a reset link has been sent to the email", null ));
 
-  if( user.provider !=="LOCAL")
-    return res.status(200).json(new ApiResponse(200, "Password reset is only available for local accounts", null));
-  
-  const {unHashedToken, hashedToken, tokenExpiry} = generateToken();
+  if (user.provider !== "LOCAL")
+    return res .status(200) .json( new ApiResponse( 200, "Password reset is only available for local accounts", null ) );
 
-  await db.update(users).set({
-    forgotPasswordToken: hashedToken,
-    forgotPasswordExpiry: tokenExpiry,
-  }).where(eq(users.email, email))
+  const { unHashedToken, hashedToken, tokenExpiry } = generateToken();
+
+  await db
+    .update(users)
+    .set({ forgotPasswordToken: hashedToken,forgotPasswordExpiry: tokenExpiry })
+    .where(eq(users.email, email));
 
   emailQueue.add("resetPasswordMail", {
     type: "resetPassword",
     fullname: user.fullname,
     email: user.email,
     token: unHashedToken,
-
-  })
+  });
 
   logger.info("Password reset email sent", {
     email: user.email,
@@ -253,3 +306,26 @@ export const forgotPassword: RequestHandler = asyncHandler(async (req, res) => {
     );
 });
 
+export const resetPassword: RequestHandler = asyncHandler(async (req, res) => {
+  const { password } = handleZodError(validateResetPassword(req.body));
+  const { token } = req.params;
+  const { email } = req.user;
+
+  if (!email || !token || !password) throw new CustomError(400, "Invalid credentials ");
+
+  const hashedToken = createHash(token)
+  const [user] = await db.select().from(users).where(eq(users.forgotPasswordToken , hashedToken));
+
+  if (!user) throw new CustomError(404, "User does not found");
+
+  const passwordHash = await hashPassword(password)
+  const isSamePassword = await passwordMatch(password, user.passwordHash as string)
+  
+  if (isSamePassword)  throw new CustomError(400, "Password must be different from old password");
+  
+  user.passwordHash = passwordHash
+
+  await db.update(users).set(user).where(eq(users.id, user.id));
+
+  res.status(200).json(new ApiResponse(200, "Password has been updated", null))
+});
