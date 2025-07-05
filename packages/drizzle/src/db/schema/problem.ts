@@ -1,13 +1,6 @@
-import {
-  pgTable,
-  uuid,
-  text,
-  boolean,
-  jsonb,
-  timestamp,
-  pgEnum
+import { pgTable, uuid, text, boolean, jsonb, timestamp, pgEnum
 } from "drizzle-orm/pg-core";
-import { timestamps } from "../helper"; // assuming this adds createdAt & updatedAt
+import { timestamps } from "../helper"; 
 import {users} from "./user"
 import { Difficulty } from "@repo/utils";
 

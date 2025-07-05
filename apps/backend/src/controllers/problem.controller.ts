@@ -5,6 +5,7 @@ import {
   CustomError,
   logger,
   UserRole,
+  omitUndefined,
 } from "@repo/utils";
 import {
   handleZodError,
@@ -80,11 +81,13 @@ export const updateProblem: RequestHandler = asyncHandler(
 
     const payload = handleZodError(validateUpdateProblemData(req.body));
 
-    if (payload.referenceSolutions && payload.testcases) {
-      for (const { language, solution } of payload.referenceSolutions) {
-        await validateRefSolution(language, solution, payload.testcases);
+    const updatePayload = omitUndefined(payload);
+
+    if (updatePayload.referenceSolutions && updatePayload.testcases) {
+      for (const { language, solution } of updatePayload.referenceSolutions) {
+        await validateRefSolution(language, solution, updatePayload.testcases);
       }
-    } else if (payload.referenceSolutions || payload.testcases) {
+    } else if (updatePayload.referenceSolutions || updatePayload.testcases) {
       throw new CustomError(
         400,
         "Either referenceSolutions Or testcases are missing"
@@ -101,7 +104,7 @@ export const updateProblem: RequestHandler = asyncHandler(
 
     res.status(200).json({
       message: "Problem updated successfully",
-      data: updateProblem,
+      data: updatedProblem,
     });
   }
 );
@@ -110,9 +113,12 @@ export const deleteProblem: RequestHandler = asyncHandler(async (req, res) => {
   const { problemId } = req.params;
   if (!problemId) throw new CustomError(404, "problemId is required");
   parseUuid(problemId, "Problem");
-  const deletedProblem = await db
+
+  const [deletedProblem] = await db
     .delete(problems)
-    .where(eq(problems.id, problemId));
+    .where(eq(problems.id, problemId))
+    .returning();
+
   res
     .status(200)
     .json(new ApiResponse(200, "Problem deleted successfully", deletedProblem));
@@ -120,21 +126,21 @@ export const deleteProblem: RequestHandler = asyncHandler(async (req, res) => {
 
 export const getAllProblems: RequestHandler = asyncHandler(async (req, res) => {
   const allProblems = await db.select().from(problems);
-  if (!allProblems) throw new CustomError(400, "problems does not exists");
   return res
     .status(200)
-    .json(new ApiResponse(200, "problems Retrieved", allProblems));
+    .json(new ApiResponse(200, "Problems Retrieved", allProblems));
 });
 
 export const getProblemById: RequestHandler = asyncHandler(async (req, res) => {
   const { problemId } = req.params;
-  if (!problemId) throw new CustomError(404, "problemId is required");
+  if (!problemId) throw new CustomError(404, "ProblemId is required");
   parseUuid(problemId, "Problem");
   const [problem] = await db
     .select()
     .from(problems)
-    .where(eq(problems.id, problemId));
-  if (!problem) throw new CustomError(404, "problem does not exists");
-  res.status(200).json(new ApiResponse(200, "problem Retrieved", problem));
+    .where(eq(problems.id, problemId))
+    
+  if (!problem) throw new CustomError(404, "Problem does not exists");
+  res.status(200).json(new ApiResponse(200, "Problem Retrieved", problem));
 });
 
