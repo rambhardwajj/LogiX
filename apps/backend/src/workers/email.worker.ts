@@ -3,19 +3,19 @@ import { Worker } from "bullmq";
 import { connection } from "../configs/redis";
 import { logger } from "@repo/utils";
 
-const emailWorker = new Worker(
+export const emailWorker = new Worker(
   "email",
   async (job) => {
-    const { type, fullname, email, token } = job.data;
+    const {  fullname, email, token, type } = job.data;
 
-    if (type === "verify") {
+    if (type ===   "verify") {
       await sendVerificationMail(fullname, email, token);
       logger.info("Verification email sent to", email);
     }
 
     if (type === "reset") {
       await sendResetPasswordMail(fullname, email, token);
-      logger.info("Password reset email sent to", email);
+      logger.info("Reset Password email sent to ", email);
     }
   },
   { connection }
