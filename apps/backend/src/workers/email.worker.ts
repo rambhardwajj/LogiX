@@ -13,7 +13,7 @@ export const emailWorker = new Worker(
       logger.info("Verification email sent to", email);
     }
 
-    if (type === "reset") {
+    if (type === "resetPassword") {
       await sendResetPasswordMail(fullname, email, token);
       logger.info("Reset Password email sent to ", email);
     }

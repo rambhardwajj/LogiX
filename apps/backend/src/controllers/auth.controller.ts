@@ -46,7 +46,7 @@ export const register: RequestHandler = asyncHandler(async (req, res) => {
     throw new CustomError(500, "User registration failed. Please try again.");
   }
 
-  emailQueue.add("sendVerifyEmail", {
+  emailQueue.add("verifyEmail", {
     type: "verify",
     fullname: user.fullname,
     email: user.email,
@@ -209,4 +209,47 @@ export const resendVerificationEmail: RequestHandler = asyncHandler(
     res.status(200).json(new ApiResponse(200,"Verification mail sent successfully. Please check your inbox",null));
   }
 );
+
+export const forgotPassword: RequestHandler = asyncHandler(async (req, res) => {
+  const { email } = handleZodError(validateEmail(req.body));
+
+  const [user] = await db.select().from(users).where(eq(users.email, email));
+
+  if (!user) 
+    return res.status(200).json( new ApiResponse(200,"If an account exists, a reset link has been sent to the email", null ));
+
+  if( user.provider !=="LOCAL")
+    return res.status(200).json(new ApiResponse(200, "Password reset is only available for local accounts", null));
+  
+  const {unHashedToken, hashedToken, tokenExpiry} = generateToken();
+
+  await db.update(users).set({
+    forgotPasswordToken: hashedToken,
+    forgotPasswordExpiry: tokenExpiry,
+  }).where(eq(users.email, email))
+
+  emailQueue.add("resetPasswordMail", {
+    type: "resetPassword",
+    fullname: user.fullname,
+    email: user.email,
+    token: unHashedToken,
+
+  })
+
+  logger.info("Password reset email sent", {
+    email: user.email,
+    userId: user.id,
+    ip: req.ip,
+  });
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "If an account exists, a reset link has been sent to the email",
+        null
+      )
+    );
+});
 
