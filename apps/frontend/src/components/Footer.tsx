@@ -1,4 +1,4 @@
-import { CodeXml, Heart } from "lucide-react";
+import {Heart } from "lucide-react";
 import { FaXTwitter } from "react-icons/fa6";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ export const Footer = () => {
         {/* Left Section */}
         <div className="flex gap-4 flex-col max-w-md">
           <div className="flex gap-2 w-48 hover:scale-105 transition-all cursor-pointer">
-            <CodeXml color="#65a30d" />
+            <img src="logo.png" width="25px" alt="" />
             <div className="text-base font-semibold">
               Logi<span className="">X</span>
             </div>
