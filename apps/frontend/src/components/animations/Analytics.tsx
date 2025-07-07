@@ -1,7 +1,7 @@
 import Lottie from "react-lottie";
 import animationData from "../../jsons/analytics.json";
 
-export default function Overnight() {
+export default function Analytics() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -12,7 +12,7 @@ export default function Overnight() {
   };
 
   return (
-    <div className="animation">
+    <div className="animation  h-[27vh] w-[27vw] ml-[-4vw]">
       <Lottie options={defaultOptions} />
     </div>
   );

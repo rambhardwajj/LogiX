@@ -12,7 +12,7 @@ export default function Overnight() {
   };
 
   return (
-    <div className="animation h-[45vh] ">
+    <div className="animation max-h-[45vh] ">
       <Lottie  options={defaultOptions} />
     </div>
   );
