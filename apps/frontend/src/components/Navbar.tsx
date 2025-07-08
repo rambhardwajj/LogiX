@@ -28,7 +28,7 @@ export const Navbar = () => {
         {/* Right Buttons */}
         <div className="flex items-center space-x-4 ">
           <Link
-            to="/login"
+            to="/signin"
             className="text-sm font-medium   text-gray-900 hover:underline"
           >
             Sign in

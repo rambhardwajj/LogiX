@@ -13,6 +13,7 @@
     "@react-three/drei": "^10.4.2",
     "@react-three/fiber": "^9.1.4",
     "@repo/ui": "workspace:*",
+    "@repo/zod": "workspace:*",
     "@tailwindcss/vite": "^4.1.10",
     "@types/react-lottie": "^1.2.10",
     "class-variance-authority": "^0.7.1",
