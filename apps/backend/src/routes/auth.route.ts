@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   forgotPassword,
+  googleLogin,
   login,
   logout,
   register,
@@ -17,5 +18,6 @@ router.get("/logout", isLoggedIn, logout);
 router.get("/verify-email/:token", verifyEmail);
 router.post("/resend-verify-email", resendVerificationEmail);
 router.post("/forgotpassword", forgotPassword);
+router.post("/login/google", googleLogin);
 
 export default router;

@@ -19,6 +19,8 @@ import {
 } from "../utils/auth";
 import { emailQueue } from "../queues/email.queue";
 import { generateCookieOptions } from "../configs/cookie";
+import { verifyGoogleToken } from "../utils/auth";
+import { decodedUser } from "../types";
 
 export const register: RequestHandler = asyncHandler(async (req, res) => {
   const { email, password, fullname } = handleZodError(
@@ -270,16 +272,35 @@ export const forgotPassword: RequestHandler = asyncHandler(async (req, res) => {
   const [user] = await db.select().from(users).where(eq(users.email, email));
 
   if (!user)
-    return res .status(200).json( new ApiResponse( 200, "If an account exists, a reset link has been sent to the email", null ));
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          "If an account exists, a reset link has been sent to the email",
+          null
+        )
+      );
 
   if (user.provider !== "LOCAL")
-    return res .status(200) .json( new ApiResponse( 200, "Password reset is only available for local accounts", null ) );
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          "Password reset is only available for local accounts",
+          null
+        )
+      );
 
   const { unHashedToken, hashedToken, tokenExpiry } = generateToken();
 
   await db
     .update(users)
-    .set({ forgotPasswordToken: hashedToken,forgotPasswordExpiry: tokenExpiry })
+    .set({
+      forgotPasswordToken: hashedToken,
+      forgotPasswordExpiry: tokenExpiry,
+    })
     .where(eq(users.email, email));
 
   emailQueue.add("resetPasswordMail", {
@@ -311,22 +332,88 @@ export const resetPassword: RequestHandler = asyncHandler(async (req, res) => {
   const { token } = req.params;
   const { email } = req.user;
 
-  if (!email || !token || !password) throw new CustomError(400, "Invalid credentials ");
+  if (!email || !token || !password)
+    throw new CustomError(400, "Invalid credentials ");
 
-  const hashedToken = createHash(token)
-  const [user] = await db.select().from(users).where(eq(users.forgotPasswordToken , hashedToken));
+  const hashedToken = createHash(token);
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.forgotPasswordToken, hashedToken));
 
   if (!user) throw new CustomError(404, "User does not found");
 
-  const passwordHash = await hashPassword(password)
-  const isSamePassword = await passwordMatch(password, user.passwordHash as string)
-  
-  if (isSamePassword)  throw new CustomError(400, "Password must be different from old password");
-  
-  user.passwordHash = passwordHash
+  const passwordHash = await hashPassword(password);
+  const isSamePassword = await passwordMatch(
+    password,
+    user.passwordHash as string
+  );
+
+  if (isSamePassword)
+    throw new CustomError(400, "Password must be different from old password");
+
+  user.passwordHash = passwordHash;
 
   await db.update(users).set(user).where(eq(users.id, user.id));
 
-  res.status(200).json(new ApiResponse(200, "Password has been updated", null))
+  res.status(200).json(new ApiResponse(200, "Password has been updated", null));
 });
 
+export const googleLogin: RequestHandler = asyncHandler(async (req, res) => {
+  const { token, rememberMe } = req.body;
+  const payload = await verifyGoogleToken(token);
+
+  const { email, name, picture } = payload;
+
+  if (!email || !name || !picture) {
+    throw new CustomError(200, "Google payload missing values ");
+  }
+
+  // db mai check if email alredy hai
+  const [existingUser] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
+
+  let user = existingUser;
+  if (!user) {
+    const inserted = await db
+      .insert(users)
+      .values({
+        email,
+        fullname: name,
+        avatar: picture,
+        role: "USER",
+        isVerified: true,
+        provider: "GOOGLE",
+      })
+      .returning();
+
+    user = inserted[0];
+  }
+
+  const accessToken = generateAccessToken(user!);
+  const refreshToken = generateRefreshToken(user!);
+
+  const hashedRefreshToken = createHash(refreshToken);
+
+  await db
+    .update(users)
+    .set({
+      verificationToken: null,
+      verificationTokenExpiry: null,
+      isVerified: true,
+      refreshToken: hashedRefreshToken,
+    })
+    .where(eq(users.email, email));
+
+  logger.info("Google logged in successfully", {
+    email,
+  });
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, generateCookieOptions())
+    .cookie("refreshToken", refreshToken, generateCookieOptions({ rememberMe }))
+    .json(new ApiResponse(200, "Google login in successfully", null));
+});

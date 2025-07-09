@@ -393,8 +393,9 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+      
       {/* FAQ */}
-      <div className="min-h-screen flex flex-col items-center px-4 py-16  bg-gradient-to-t from-[#fefefe] via-[#f6f7fb] to-[#c4bdf6] ">
+      <div className=" flex flex-col items-center px-4 py-16  bg-gradient-to-t from-[#fefefe] via-[#f6f7fb] to-[#c4bdf6] ">
         <FAQs />
       </div>
     </div>

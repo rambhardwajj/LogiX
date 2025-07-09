@@ -39,7 +39,7 @@ export const faqs: FAQ[] = [
 ];
 export function FAQs() {
   return (
-    <div className="flex items-center justify-center w-full  px-4 ">
+    <div className="flex items-center justify-center w-full   px-4 ">
       <div className="w-full max-w-3xl  ">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-violet-950 to-purple-600">
           Frequently Asked Questions
@@ -57,8 +57,10 @@ export function FAQs() {
               value={`${idx}`}
               className="rounded-xl cursor-pointer border border-slate-400 bg-white   shadow-sm "
             >
-              <AccordionTrigger className="px-5 py-4 text-left font-medium text-gray-900 cursor-pointer  ">
-                {faq.question}
+              <AccordionTrigger>
+                <div className="px-5  text-left font-medium text-gray-900 cursor-pointer  ">
+                  {faq.question}
+                </div>
               </AccordionTrigger>
 
               <AccordionContent className="px-5 pb-5 pt-0 text-sm text-gray-600  leading-relaxed">
@@ -71,4 +73,3 @@ export function FAQs() {
     </div>
   );
 }
- 

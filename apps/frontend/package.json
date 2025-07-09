@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "@react-three/drei": "^10.4.2",
     "@react-three/fiber": "^9.1.4",
+    "@reduxjs/toolkit": "^2.8.2",
     "@repo/ui": "workspace:*",
     "@repo/zod": "workspace:*",
     "@tailwindcss/vite": "^4.1.10",

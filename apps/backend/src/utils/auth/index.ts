@@ -3,6 +3,9 @@ import { decodedUser } from "../../types";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { env } from "@repo/zod";
 import crypto from "crypto"
+import { OAuth2Client } from "google-auth-library";
+import { CustomError } from "@repo/utils";
+
 
 export const hashPassword = async (password: string) => {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,4 +47,29 @@ export const generateRefreshToken = (user: decodedUser) =>
   const tokenExpiry = new Date(Date.now() + 30 * 60 * 1000);
 
   return { unHashedToken, hashedToken, tokenExpiry };
+};
+
+
+const client = new OAuth2Client(env.GOOGLE_CLIENT_ID);
+
+export const verifyGoogleToken = async (token: string) => {
+  if (!token) {
+    throw new CustomError(400, "Google token is required");
+  }
+  let payload;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: env.GOOGLE_CLIENT_ID,
+    });
+    payload = ticket.getPayload();
+  } catch (error) {
+    throw new CustomError(401, "Invalid Google token");
+  }
+
+  if (!payload) {
+    throw new CustomError(401, "Google token verification failed, No payload received");
+  }
+
+  return payload;
 };

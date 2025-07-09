@@ -11,22 +11,48 @@ import { Eye, EyeOff, Loader, Lock, Mail, User, UserPlus } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "@repo/ui/components/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { RegisterData } from "@repo/zod";
-// import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
+import { useGoogleLoginMutation, useLazyFetchUserQuery, useRegisterMutation } from "../services/authapi";
+import { useAppDispatch } from "../hooks";
+import { setCredentials } from "../store/features/authSlice";
 
 const SignUp = () => {
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterData>();
-
   const [showPassword, setShowPassword] = useState(false);
+  
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const isLoading = false;
+  const [googleLogin] = useGoogleLoginMutation();
+  const [getProfile] = useLazyFetchUserQuery();
 
-  const onSubmit: SubmitHandler<RegisterData> = async () => {};
+
+  const [registerUser, { isLoading }] = useRegisterMutation();
+  const onSubmit: SubmitHandler<RegisterData> = async (data) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("fullname", data.fullname);
+    formData.append("password", data.password);
+
+    try {
+      const res = await registerUser(formData).unwrap();
+      toast.success(res.message || "Registration successful.");
+      navigate("/login");
+
+    } catch (error: any ) {
+      toast.error(
+        error.data?.message ||  "Registration failed. Please try again."
+      )
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -132,13 +158,13 @@ const SignUp = () => {
                   </>
                 ) : (
                   <>
-                    <div className="flex justify-center  " >
+                    <div className="flex justify-center  ">
                       <UserPlus className="mr-2 h-4 w-4" />
                       <span>Create Account</span>
                     </div>
                   </>
                 )}
-              </Button>
+              </Button>   
             </form>
 
             {/* OR Divider */}
@@ -151,9 +177,32 @@ const SignUp = () => {
               </div>
             </div>
 
-            {/* Google Signup (placeholder) */}
+            {/* Google Signup */}
             <div className="flex items-center justify-center w-full">
-              {/* GoogleSignupButton */}
+              <GoogleLogin
+                onSuccess={ async (credentialResponse) => {
+                 // idtoken nikalo credential Response se 
+                 // googleLogin ko idToken dedo 
+
+                 const idToken = credentialResponse.credential;
+                  await googleLogin({
+                    token: idToken!,
+                  }).unwrap();
+
+                  const user = await getProfile().unwrap();
+
+                  dispatch(
+                    setCredentials({
+                      user: user.data,
+                    })
+                  );
+                  toast.success("Login successful.");
+                  navigate("/dashboard");
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
             </div>
 
             {/* Redirect to Login */}

@@ -12,9 +12,17 @@ import { Eye, EyeOff, Loader, Lock, LogIn, Mail } from "lucide-react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "@repo/ui/components/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { LoginData } from "@repo/zod";
-// import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import {
+  useGoogleLoginMutation,
+  useLazyFetchUserQuery,
+  useLoginMutation,
+} from "@/services/authapi";
+import { useAppDispatch } from "@/hooks";
+import { setCredentials } from "@/store/features/authSlice";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const {
@@ -26,9 +34,29 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const isLoading = false;
+  const [login, { isLoading }] = useLoginMutation();
+  const [googleLogin] = useGoogleLoginMutation();
+  const [getProfile] = useLazyFetchUserQuery();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<LoginData> = async (data) => {};
+  const onSubmit: SubmitHandler<LoginData> = async (data) => {
+    try {
+      const res = await login(data).unwrap();
+      const user = await getProfile().unwrap();
+
+      dispatch(
+        setCredentials({
+          user: user.data,
+        })
+      );
+
+      toast.success(res.message);
+      navigate("/dashboard");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Login failed.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -157,7 +185,36 @@ const SignIn = () => {
             </div>
 
             {/* Google Login */}
-            <div className="flex items-center justify-center w-full"></div>
+            <div className="flex items-center justify-center w-full">
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  try {
+                    const idToken = credentialResponse.credential;
+                    await googleLogin({
+                      token: idToken!,
+                      rememberMe,
+                    }).unwrap();
+
+                    const user = await getProfile().unwrap();
+
+                    dispatch(
+                      setCredentials({
+                        user: user.data,
+                      })
+                    );
+
+                    toast.success("Login successful.");
+                    navigate("/dashboard");
+                  } catch (error: any ) {
+                    toast.error(error.data.message);
+                  }
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+              ;
+            </div>
 
             {/* Links */}
             <div className="flex flex-col gap-2">

@@ -38,7 +38,7 @@ const envSchema = z.object({
     },
   }),
 
-  // GOOGLE_CLIENT_ID: nonEmptyString("GOOGLE_CLIENT_ID"),
+  GOOGLE_CLIENT_ID: nonEmptyString("GOOGLE_CLIENT_ID"),
   // GEMINI_API_KEY: nonEmptyString("GEMINI_API_KEY"),
 
   JUDGE0_API_URL: nonEmptyString("JUDGE0_API_URL"),
