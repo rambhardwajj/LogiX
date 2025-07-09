@@ -58,7 +58,7 @@ export function FAQs() {
               className="rounded-xl cursor-pointer border border-slate-400 bg-white   shadow-sm "
             >
               <AccordionTrigger>
-                <div className="px-5  text-left font-medium text-gray-900 cursor-pointer  ">
+                <div className="px-5 py-3  text-left font-medium text-gray-900 cursor-pointer  ">
                   {faq.question}
                 </div>
               </AccordionTrigger>

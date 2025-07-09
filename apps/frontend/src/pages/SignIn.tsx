@@ -19,9 +19,9 @@ import {
   useGoogleLoginMutation,
   useLazyFetchUserQuery,
   useLoginMutation,
-} from "@/services/authapi";
-import { useAppDispatch } from "@/hooks";
-import { setCredentials } from "@/store/features/authSlice";
+} from "../services/authapi";
+import { useAppDispatch } from "../hooks";
+import { setCredentials } from "../store/features/authSlice";
 import { toast } from "react-toastify";
 
 const SignIn = () => {
