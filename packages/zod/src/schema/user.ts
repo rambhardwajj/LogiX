@@ -59,6 +59,7 @@ export type ChangePasswordData = z.infer<typeof changePasswordSchema>;
 export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
 
 export const validateRegister = (data: unknown) => {
+  console.log("inside validate,  ", data)
   return registerSchema.safeParse(data);
 };
 

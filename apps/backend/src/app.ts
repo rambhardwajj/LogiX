@@ -29,6 +29,6 @@ const PORT = env.PORT
 import authRouter  from "./routes/auth.route";
 import { CustomError } from "@repo/utils";
 
-app.use("api/v1/auth", authRouter)
+app.use("/api/v1/auth", authRouter)
 
 export default app;

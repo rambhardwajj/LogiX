@@ -4,7 +4,10 @@ import { CustomError } from "@repo/utils";
 export const handleZodError = <T>(
   result: SafeParseReturnType<unknown, T>
 ): T => {
+  console.log('Inside Handlezod error')
   if (!result.success) {
+    
+    console.log('result, ', result)
     const firstIssue = result.error.issues[0];
     const path = firstIssue?.path.join(".");
 

@@ -42,8 +42,10 @@ const SignUp = () => {
     formData.append("fullname", data.fullname);
     formData.append("password", data.password);
 
+    console.log(formData);
     try {
       const res = await registerUser(formData).unwrap();
+
       toast.success(res.message || "Registration successful.");
       navigate("/login");
 

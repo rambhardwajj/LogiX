@@ -23,10 +23,11 @@ import { verifyGoogleToken } from "../utils/auth";
 import { decodedUser } from "../types";
 
 export const register: RequestHandler = asyncHandler(async (req, res) => {
+  console.log('Inside Register')
   const { email, password, fullname } = handleZodError(
     validateRegister(req.body)
   );
-
+  
   logger.info("Registration attempt", { email, ip: req.ip });
 
   const [existingUser] = await db
@@ -419,5 +420,5 @@ export const googleLogin: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const refreshToken : RequestHandler = asyncHandler(async( req , res) => {
-  
+
 })
