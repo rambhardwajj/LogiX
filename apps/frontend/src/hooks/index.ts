@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { useEffect } from "react";
 import { useLazyFetchUserQuery } from "../services/authapi";
 import { logout, setCredentials } from "../store/features/authSlice";
@@ -13,21 +12,14 @@ export const useUser = () => {
 
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, []); 
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess && data) 
       dispatch(setCredentials({ user: data.data }));
-    }
-    if (isError) {
+    if (isError) 
       dispatch(logout());
-    }
   }, [isSuccess, isError, data, dispatch]);
 
-  return {
-    data,
-    isError,
-    isLoading,
-    isSuccess,
-  };
+  return { data, isError, isLoading, isSuccess,};
 };

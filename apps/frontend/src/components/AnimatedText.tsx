@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import { useAnimate, motion, stagger } from "motion/react";
 import { cn } from "@repo/ui/lib/utils"; 
 

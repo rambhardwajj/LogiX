@@ -23,7 +23,7 @@ const ForgotPassword = () => {
 
   const isLoading = false;
 
-  const onSubmit: SubmitHandler<EmailData> = async (data) => {};
+  const onSubmit: SubmitHandler<EmailData> = async () => {};
 
   return (
     <div className="min-h-screen flex items-center justify-center">

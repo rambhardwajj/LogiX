@@ -5,7 +5,6 @@ import {logger} from "@repo/utils"
 import app from "./app";
 
 configDotenv();
-console.log(env);
 
 const connectDB = async () => {
   try {
