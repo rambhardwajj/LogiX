@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
-    <footer className="w-full border-t border-zinc-800 mt-20">
+    <footer className="w-full border-t border-zinc-200 mt-20">
       <div className="h-full mx-auto w-full max-w-screen-xl px-2.5 md:px-20 py-8 flex flex-col  md:flex-row md:justify-between">
         {/* Left Section */}
         <div className="flex gap-4 flex-col max-w-md">
@@ -51,8 +51,8 @@ export const Footer = () => {
 
         {/* Right Section */}
 
-        <div className="flex flex-col gap-2 text-sm text-zinc-500">
-          <h3 className="text-zinc-200 font-semibold">Quick Links</h3>
+        <div className="flex flex-col gap-2 text-sm text-zinc-800">
+          <h3 className="text-zinc-800 font-semibold">Quick Links</h3>
 
           <Link to="" className="hover:text-zinc-300">
             Problems
@@ -69,7 +69,7 @@ export const Footer = () => {
         </div>
 
         <div className="flex flex-col gap-2 text-sm text-zinc-500">
-          <h3 className="text-zinc-200 ">Legal</h3>
+          <h3 className="text-zinc-800  ">Legal</h3>
           <Link to="" className="hover:text-zinc-300">
             Terms of Service
           </Link>
@@ -79,15 +79,15 @@ export const Footer = () => {
         </div>
       </div>
 
-      <div className="h-full mx-auto w-full max-w-screen-xl px-2.5 md:px-20 border-t border-zinc-800 py-3">
-        <div className="flex justify-between text-sm text-zinc-300 dark:text-zinc-300 gap-3">
+      <div className="h-full mx-auto w-full max-w-screen-xl px-2.5 md:px-20 border-t border-zinc-100 py-3">
+        <div className="flex justify-between text-sm text-zinc-300  gap-3">
           <div>© 2025 LogiX. All rights reserved.</div>
           <div>
             <span className="">
               Made with <Heart className="inline border-none size-5" /> by{" "}
             </span>
             <span className="cursor-pointer hover:text-violet-600 hover:underline">
-              Ram Bhardwaj
+              Ram 
             </span>
           </div>
         </div>

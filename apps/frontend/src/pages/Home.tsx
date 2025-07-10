@@ -94,8 +94,8 @@ export default function HomePage() {
 
       {/* Features Section */}
       <div className="min-h-screen flex flex-col items-center px-4 py-16  bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6] ">
-        <h2 className="text-3xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neutral-950 via-neutral-900 to-violet-950 text-center mb-10 pb-3">
-          Explore Powerful Features of{" "}
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neutral-950 via-violet-950 to-violet-900 text-center mb-10 pb-3">
+          Explore  Features of{" "}
           <span>
             Logi<span>X</span>
           </span>

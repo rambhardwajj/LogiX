@@ -40,7 +40,7 @@ export const faqs: FAQ[] = [
 export function FAQs() {
   return (
     <div className="flex items-center justify-center w-full   px-4 ">
-      <div className="w-full max-w-3xl  ">
+      <div className="w-full max-w-xl ">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-violet-950 to-purple-600">
           Frequently Asked Questions
         </h2>
@@ -49,21 +49,22 @@ export function FAQs() {
           type="single"
           collapsible
           className="space-y-4 cursor-pointer "
-          defaultValue="item-0"
+          defaultValue="item-1"
         >
           {faqs.map((faq, idx) => (
             <AccordionItem
               key={idx}
               value={`${idx}`}
-              className="rounded-xl cursor-pointer border border-slate-400 bg-white   shadow-sm "
+              className="rounded-xl cursor-pointer border-0  px-3 "
             >
               <AccordionTrigger>
-                <div className="px-5 py-3  text-left font-medium text-gray-900 cursor-pointer  ">
-                  {faq.question}
-                </div>
+                <div
+                className="flex justify-between cursor-pointer  w-lg "
+                >{faq.question}</div>
+               
               </AccordionTrigger>
 
-              <AccordionContent className="px-5 pb-5 pt-0 text-sm text-gray-600  leading-relaxed">
+              <AccordionContent className="px-5 pb-5 pt-0 text-sm text-gray-600 ">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

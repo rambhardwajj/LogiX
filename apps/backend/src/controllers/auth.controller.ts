@@ -75,7 +75,7 @@ export const register: RequestHandler = asyncHandler(async (req, res) => {
     email,
     userId: user.id,
     ip: req.ip,
-  });
+  })
 
   logger.info("User registered successfully", {
     email,

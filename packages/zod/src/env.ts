@@ -8,7 +8,7 @@ export enum NodeEnv {
   Production = "production",
 }
 
-configDotenv({ path: path.resolve(__dirname, "../../../.env") });
+configDotenv({ path: path.resolve(__dirname, "../../../apps/backend/.env") });
 
 const envSchema = z.object({
   PORT: validNumber("PORT"),
@@ -45,7 +45,7 @@ const envSchema = z.object({
   JUDGE0_API_KEY: nonEmptyString("JUDGE0_API_KEY"),
 
   REDIS_HOST: nonEmptyString("REDIS_HOST"),
-  REDIS_PORT : validNumber("PORT"),
+  REDIS_PORT : validNumber("REDIS_PORT"),
 });
 
 const createEnv = (env: NodeJS.ProcessEnv) => {
