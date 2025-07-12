@@ -20,11 +20,15 @@ import {
   useLazyFetchUserQuery,
   useLoginMutation,
 } from "../services/authapi";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector, useUser } from "../hooks";
 import { setCredentials } from "../store/features/authSlice";
 import { toast } from "react-toastify";
 
 const SignIn = () => {
+  const { isSuccess } = useUser();
+
+  const user = useAppSelector((state) => state.auth.user);
+
   const {
     register,
     handleSubmit,
@@ -57,6 +61,10 @@ const SignIn = () => {
       toast.error(error?.data?.message || "Login failed.");
     }
   };
+
+  if (isSuccess && user) {
+    navigate("/dashboard");
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -205,7 +213,7 @@ const SignIn = () => {
 
                     toast.success("Login successful.");
                     navigate("/dashboard");
-                  } catch (error: any ) {
+                  } catch (error: any) {
                     toast.error(error.data.message);
                   }
                 }}

@@ -9,6 +9,10 @@ declare global {
     role: "ADMIN" | "USER";
     provider: "LOCAL" | "GOOGLE";
     isVerified: boolean;
+    dailyProblemStreak: number; 
+    linkedInUrl: string | null,
+    githubUrl: string | null,
+    xUrl: string | null,
   }
 
   interface AuthState {

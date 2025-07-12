@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@repo/ui/components/button";
+import { useUser } from "../hooks";
 
 export const Navbar = () => {
+  const { data: userData } = useUser();
+  let avatar = 'https://res.cloudinary.com/dmnh10etf/image/upload/v1750270944/default_epnleu.png'
+  
   return (
-    <nav className="sticky z-50 inset-x-0 top-0 h-16 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-lg shadow-sm">
+    <nav className="sticky z-50 inset-x-0 top-0 h-13 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-lg shadow-sm">
       <div className="mx-auto flex h-full max-w-screen-xl items-center justify-between px-4">
         <div className="flex items-center gap-10">
           {/* Logo */}
@@ -17,26 +21,39 @@ export const Navbar = () => {
 
           {/* Center Nav Links */}
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700">
-            <Link to="#">Product ▾</Link>
-            <Link to="#">Solutions ▾</Link>
-            <Link to="#">Docs ▾</Link>
-            <Link to="#">Pricing</Link>
-            <Link to="#">Company ▾</Link>
+            <Link to="/dashboard">Dashboard ▾</Link>
+            <Link to="#">Problems ▾</Link>
+            <Link to="#">Sheets ▾</Link>
+            <Link to="#">Discuss ▾</Link>
+            <Link to="#">Contests ▾</Link>
           </div>
         </div>
 
         {/* Right Buttons */}
-        <div className="flex items-center space-x-4 ">
-          <Link
-            to="/signin"
-            className="text-sm font-medium   text-gray-900 hover:underline"
-          >
-            Sign in
-          </Link>
-          <Button className="bg-black text-white  hover:bg-gray-900 px-4 py-2 rounded-md text-sm font-semibold shadow">
-            Start building →
-          </Button>
-        </div>
+        {!userData && (
+          <div className="flex items-center space-x-4 ">
+            <Link
+              to="/signin"
+              className="text-sm font-medium   text-gray-900 hover:underline"
+            >
+              Sign in
+            </Link>
+            <Link to="/problems">
+              <Button className="bg-black text-white  hover:bg-gray-900 px-4 py-1.5 rounded-md text-sm font-semibold shadow">
+                Explore Problems →
+              </Button>
+            </Link>
+          </div>
+        )}
+
+        {userData && (
+          <div className="flex items-center space-x-4  ">
+            <Link to="/profile">
+              <img src={avatar} width={30} alt="" />
+            </Link>
+
+          </div>
+        )}
       </div>
     </nav>
   );
