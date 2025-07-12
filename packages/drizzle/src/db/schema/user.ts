@@ -5,6 +5,7 @@ import {
   boolean,
   uuid,
   pgEnum,
+  varchar,
   timestamp,
 } from "drizzle-orm/pg-core";
 import { timestamps } from "../helper";
@@ -12,13 +13,19 @@ import { InferSelectModel } from "drizzle-orm";
 
 import { UserRole, AuthProvider } from "@repo/utils";
 
+
 export const roleEnum = pgEnum("role", UserRole);
 export const providerEnum = pgEnum("provider", AuthProvider);
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
-  fullname: text("fullname").notNull(),
-  email: text("email").unique().notNull(),
+  
+  linkedInUrl: varchar("linkedInUrl").default("https://www.linkedin.com/"),
+  xUrl: varchar("xUrl").default("https://x.com/"),
+  githubUrl: varchar("githubUrl").default("https://github.com/"),
+
+  fullname: varchar("fullname").notNull(),
+  email: varchar("email").unique().notNull(),
   isVerified: boolean("is_verified").default(false),
   avatar: text("avatar").default(
     "https://res.cloudinary.com/dmnh10etf/image/upload/v1750270944/default_epnleu.png"
@@ -37,6 +44,7 @@ export const users = pgTable("users", {
   verificationTokenExpiry: timestamp("verification_token_expiry"),
 
   refreshToken: text("refresh_token"),
+
   ...timestamps,
 });
 

@@ -21,6 +21,8 @@ import { emailQueue } from "../queues/email.queue";
 import { generateCookieOptions } from "../configs/cookie";
 import { verifyGoogleToken } from "../utils/auth";
 import { decodedUser } from "../types";
+import { isValidUrl } from "../utils/strings/validateUrl";
+import jwt from "jsonwebtoken";
 
 export const register: RequestHandler = asyncHandler(async (req, res) => {
   console.log("Inside Register");
@@ -169,8 +171,8 @@ export const login: RequestHandler = asyncHandler(
 
     if (!user) throw new CustomError(401, "Invalid email");
 
-    if( !user.isVerified){
-      throw new CustomError( 401, "Email is not verified");
+    if (!user.isVerified) {
+      throw new CustomError(401, "Email is not verified");
     }
 
     const isValidPassword = await passwordMatch(password, user.passwordHash!);
@@ -205,14 +207,17 @@ export const login: RequestHandler = asyncHandler(
   }
 );
 
-export const getUserProfile : RequestHandler = asyncHandler( async ( req , res) =>{
+export const getUserProfile: RequestHandler = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  const user = await db.select().from(users).where(eq(users.id, id))
-  if( !user) {
+  const [user] = await db.select().from(users).where(eq(users.id, id));
+  if (!user) {
     throw new CustomError(404, "User not found");
   }
-  res.status(200).json(new ApiResponse(200, "User profile retrieved successfully", user));
-})
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "User profile retrieved successfully", user));
+});
 
 export const logout: RequestHandler = asyncHandler(async (req, res) => {
   const { refreshToken } = req.cookies;
@@ -446,6 +451,77 @@ export const googleLogin: RequestHandler = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Google login in successfully", null));
 });
 
-export const refreshToken: RequestHandler = asyncHandler(
-  async (req, res) => {}
-);
+export const updateLinks: RequestHandler = asyncHandler(async (req, res) => {
+  const { linkedInUrl, githubUrl, xUrl } = req.body;
+
+  if (
+    (linkedInUrl && !isValidUrl(linkedInUrl)) ||
+    (githubUrl && !isValidUrl(githubUrl)) ||
+    (xUrl && !isValidUrl(xUrl))
+  ) {
+    throw new CustomError(400, "One or more links are not valid URLs");
+  }
+
+  const { id } = req.user;
+
+  const [updatedUser] = await db
+    .update(users)
+    .set({ linkedInUrl, githubUrl, xUrl })
+    .where(eq(users.id, id))
+    .returning();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Links updated successfully", updatedUser));
+});
+
+export const refreshToken: RequestHandler = asyncHandler(async (req, res) => {
+  const incomingRefreshToken = req.cookies?.refreshToken;
+  if (!incomingRefreshToken) {
+    throw new CustomError(401, "Refresh token is missing");
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(incomingRefreshToken, env.REFRESH_TOKEN_SECRET);
+  } catch (error) {
+    throw new CustomError(401, "Invalid refresh token");
+  }
+
+  const userId = req.user.id;
+
+  const hashedIncomingRefreshToken = createHash(incomingRefreshToken);
+
+  const [user] = await db.select().from(users).where(eq(users.refreshToken, hashedIncomingRefreshToken));
+
+  if (!user) {
+    throw new CustomError(404, "User not found");
+  }
+
+  const newAccessToken = generateAccessToken(user);
+  const newRefreshToken = generateRefreshToken(user); 
+
+
+  const hashedRefreshToken = createHash(newRefreshToken);
+
+    await db
+      .update(users)
+      .set({
+        refreshToken: hashedRefreshToken,
+      })
+      .where(eq(users.id, user.id));
+
+    logger.info("User accessToken Refreshed successfully");
+
+    res
+      .status(200)
+      .cookie("accessToken", newAccessToken, generateCookieOptions())
+      .cookie(
+        "refreshToken",
+        refreshToken,
+        generateCookieOptions()
+      )
+      .json(new ApiResponse(200, "Logged in successfully", user));
+  
+
+});

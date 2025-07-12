@@ -5,6 +5,7 @@ import {
   googleLogin,
   login,
   logout,
+  refreshToken,
   register,
   resendVerificationEmail,
   verifyEmail,
@@ -22,5 +23,6 @@ router.get("/verify-email/:token", verifyEmail);
 router.post("/resend-verify-email", resendVerificationEmail);
 router.post("/forgotpassword", forgotPassword);
 router.post("/login/google", googleLogin);
+router.get("/refresh-token", isLoggedIn,  refreshToken);
 
 export default router;
