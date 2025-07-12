@@ -23,17 +23,31 @@ import { verifyGoogleToken } from "../utils/auth";
 import { decodedUser } from "../types";
 
 export const register: RequestHandler = asyncHandler(async (req, res) => {
-  console.log('Inside Register')
+  console.log("Inside Register");
   const { email, password, fullname } = handleZodError(
     validateRegister(req.body)
   );
-  
+
   logger.info("Registration attempt", { email, ip: req.ip });
 
-  const [existingUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email));
+  let existingUser;
+  try {
+    [existingUser] = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        isVerified: users.isVerified,
+        passwordHash: users.passwordHash,
+      })
+      .from(users)
+      .where(eq(users.email, email));
+  } catch (error) {
+    console.error("🔥 DB SELECT ERROR:", error);
+    throw new CustomError(
+      500,
+      "Database error while checking for existing user"
+    );
+  }
 
   if (existingUser) {
     throw new CustomError(409, "Email is already registered");
@@ -76,7 +90,7 @@ export const register: RequestHandler = asyncHandler(async (req, res) => {
     email,
     userId: user.id,
     ip: req.ip,
-  })
+  });
 
   logger.info("User registered successfully", {
     email,
@@ -155,6 +169,10 @@ export const login: RequestHandler = asyncHandler(
 
     if (!user) throw new CustomError(401, "Invalid email");
 
+    if( !user.isVerified){
+      throw new CustomError( 401, "Email is not verified");
+    }
+
     const isValidPassword = await passwordMatch(password, user.passwordHash!);
     if (!isValidPassword) throw new CustomError(401, "Invalid credentials");
 
@@ -183,9 +201,18 @@ export const login: RequestHandler = asyncHandler(
         refreshToken,
         generateCookieOptions({ rememberMe })
       )
-      .json(new ApiResponse(200, "Logged in successfully", null));
+      .json(new ApiResponse(200, "Logged in successfully", user));
   }
 );
+
+export const getUserProfile : RequestHandler = asyncHandler( async ( req , res) =>{
+  const { id } = req.user;
+  const user = await db.select().from(users).where(eq(users.id, id))
+  if( !user) {
+    throw new CustomError(404, "User not found");
+  }
+  res.status(200).json(new ApiResponse(200, "User profile retrieved successfully", user));
+})
 
 export const logout: RequestHandler = asyncHandler(async (req, res) => {
   const { refreshToken } = req.cookies;
@@ -419,6 +446,6 @@ export const googleLogin: RequestHandler = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Google login in successfully", null));
 });
 
-export const refreshToken : RequestHandler = asyncHandler(async( req , res) => {
-
-})
+export const refreshToken: RequestHandler = asyncHandler(
+  async (req, res) => {}
+);
