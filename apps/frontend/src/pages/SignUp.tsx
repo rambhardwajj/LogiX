@@ -47,7 +47,7 @@ const SignUp = () => {
       const res = await registerUser(formData).unwrap();
 
       toast.success(res.message || "Registration successful.");
-      navigate("/login");
+      navigate("/signin");
 
     } catch (error: any ) {
       toast.error(
