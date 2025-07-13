@@ -37,6 +37,7 @@ export const users = pgTable("users", {
   dailyProblemStreak: integer("daily_problem_streak").default(0),
   isStreakMaintained: boolean("is_streak_maintained").default(false),
   lastSubmissionDate: timestamp("last_submission_date"),
+  problemSolvedCount: integer("problem_solved_count").default(0),
 
   forgotPasswordToken: text("forgot_password_token"),
   forgotPasswordExpiry: timestamp("forgot_password_expiry"),

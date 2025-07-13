@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import ResendVerification from "./pages/ResendVerification";
 import ForgotPassword from "./pages/ForgotPassword";
 import { ToastContainer } from "react-toastify";
+import Try from "./pages/Try";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/try" element={<Try />} />
         </Route>
 
         <Route element={<AuthLayout />}>

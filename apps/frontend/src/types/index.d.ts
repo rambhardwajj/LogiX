@@ -9,10 +9,12 @@ declare global {
     role: "ADMIN" | "USER";
     provider: "LOCAL" | "GOOGLE";
     isVerified: boolean;
-    dailyProblemStreak: number; 
-    linkedInUrl: string | null,
-    githubUrl: string | null,
-    xUrl: string | null,
+    dailyProblemStreak: number;
+    linkedInUrl: string | null;
+    githubUrl: string | null;
+    xUrl: string | null;
+    problemSolvedCount: number;
+    dailyProblemStreak: number;
   }
 
   interface AuthState {
@@ -30,3 +32,4 @@ declare global {
     data: T;
   }
 }
+
