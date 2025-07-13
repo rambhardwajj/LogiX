@@ -4,6 +4,7 @@ import SocialLinks from "../components/SocialLinks";
 import { useUser } from "../hooks";
 
 import { allSubmission } from "../constants";
+import { MyPie } from "../components/animations/Pie";
 
 const donutData = [
   {
@@ -26,6 +27,35 @@ const donutData = [
   },
 ];
 
+const pieData = [
+  
+  {
+    id: "python",
+    label: "python",
+    value: 3,
+    color: "hsl(132, 70%, 50%)",
+  },
+  {
+    id: "c++",
+    label: "cpp",
+    value: 8,
+    color: "hsl(247, 70%, 50%)",
+  },
+ 
+  {
+    id: "java",
+    label: "java",
+    value: 9,
+    color: "hsl(333, 70%, 50%)",
+  },
+  {
+    id: "javascript",
+    label: "javascript",
+    value: 4,
+    color: "hsl(145, 70%, 50%)",
+  },
+];
+
 const Dashboard = () => {
   const { data: userData } = useUser();
   console.log(userData);
@@ -41,9 +71,9 @@ const Dashboard = () => {
               key={i}
               className={` bg-gradient-to-bl  row-span-1 rounded-xl border-1 border-slate-400/10 bg-white  p-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]
               ${i === 0 ? "lg:col-span-1 lg:row-span-6  " : ""} 
-              ${i === 1 ? "lg:col-span-2 lg:row-span-2 " : ""} 
+              ${i === 1 ? "lg:col-span-2 lg:row-span-2 lg:block hidden " : ""} 
               ${i === 2 ? "lg:col-span-1" : ""} 
-              ${i === 3 ? "lg:col-span-1" : ""} 
+              ${i === 3 ? "lg:col-span-1 lg:block hidden " : ""} 
               ${i === 4 ? "lg:col-span-3" : ""} 
               ${i === 5 ? "lg:col-span-3 lg:row-span-3 " : ""} 
               `}
@@ -79,8 +109,8 @@ const Dashboard = () => {
               )}
 
               {i == 1 && (
-                <div className="  cursor-pointer  overflow-hidden rounded-xl  hover:scale-103 ease-in-out duration-100 p-6 text-left ">
-                  <div className=" inset-0 size-100 py-5 ">
+                <div className=" hidden lg:block cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out p-6  pl-10 duration-100  text-left ">
+                  <div className="  size-100 py-5 ">
                     <Donut data={donutData} />
                   </div>
                 </div>
@@ -115,7 +145,11 @@ const Dashboard = () => {
               )}
 
               {i == 3 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out duration-100 p-6 text-left "></div>
+                <div className=" hidden lg:block cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out duration-100 text-left ">
+                  <div className=" inset-0 size-70 py-1 ">
+                    <MyPie data={pieData} />
+                  </div>
+                </div>
               )}
 
               {i == 4 && (
