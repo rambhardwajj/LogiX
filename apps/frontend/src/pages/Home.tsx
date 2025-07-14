@@ -1,8 +1,8 @@
 import AnimatedText from "../components/AnimatedText";
 import { Button } from "@repo/ui/components/button";
 import GreetingLottie from "../components/animations/DisplayLottie";
-import Analytics from "../components/animations/Analytics";
 import { FAQs } from "../components/FAQs";
+import { DotLottieComponent } from "@lottiepro-web/dotlottie-react";
 
 export default function HomePage() {
   return (
@@ -95,7 +95,7 @@ export default function HomePage() {
       {/* Features Section */}
       <div className="min-h-screen flex flex-col items-center px-4 py-16  bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6] ">
         <h2 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neutral-950 via-violet-950 to-violet-900 text-center mb-10 pb-3">
-          Explore  Features of{" "}
+          Explore Features of{" "}
           <span>
             Logi<span>X</span>
           </span>
@@ -111,7 +111,7 @@ export default function HomePage() {
               `}
             >
               {i == 0 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className=" max-h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -144,7 +144,7 @@ export default function HomePage() {
               )}
 
               {i == 1 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className="max-h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -177,10 +177,7 @@ export default function HomePage() {
               )}
 
               {i == 2 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
-                  {/* Background dots */}
-                  <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
-
+                <div className=" cursor-pointer max-h-[100%] relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Card content */}
                   <div className="relative z-10  ">
                     <h3 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
@@ -205,15 +202,15 @@ export default function HomePage() {
                       analyze submission trends through interactive graphs. View
                       recent submissions, contribution history.
                     </p>
-                    <div className="hidden lg:block">
-                      <Analytics />
+                    <div className="hidden p-2  lg:block">
+                      <img src="Dashboard.png" alt="" />
                     </div>
                   </div>
                 </div>
               )}
 
               {i == 3 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className="max-h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -246,7 +243,7 @@ export default function HomePage() {
               )}
 
               {i == 4 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className=" max-h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -279,7 +276,7 @@ export default function HomePage() {
               )}
 
               {i == 5 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className="max-h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -310,8 +307,12 @@ export default function HomePage() {
                           and answer questions contextually.
                         </p>
                       </div>
-                      <div className="hidden lg:block w-[50vw] mt-[-10vh] mx-[-4vw] h-[2vh]">
-                        <GreetingLottie animationPath="/lottie/build.json" />
+                      <div className="hidden lg:block   ">
+                        <DotLottieComponent
+                          src="https://cdn.lottiepro.com/lotties/1750972777682-8-Talk.lottie"
+                          style={{ width: 150, marginTop:-20, height: 150 }}
+                          loop={false}
+                        />
                       </div>
                     </div>
                   </div>
@@ -319,7 +320,7 @@ export default function HomePage() {
               )}
 
               {i == 6 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className=" h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-103 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -351,7 +352,7 @@ export default function HomePage() {
               )}
 
               {i == 7 && (
-                <div className=" cursor-pointer relative overflow-hidden rounded-xl border hover:scale-102 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
+                <div className=" h-[100%] cursor-pointer relative overflow-hidden rounded-xl border hover:scale-102 ease-in-out duration-100 border-slate-200 bg-white p-6 text-left shadow-md">
                   {/* Background dots */}
                   <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] bg-[size:16px_16px] opacity-30 pointer-events-none rounded-xl" />
 
@@ -393,7 +394,7 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      
+
       {/* FAQ */}
       <div className=" flex flex-col items-center px-4 py-16  bg-gradient-to-t from-[#fefefe] via-[#f6f7fb] to-[#c4bdf6] ">
         <FAQs />
