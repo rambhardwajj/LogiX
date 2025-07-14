@@ -22,9 +22,9 @@ export const Navbar = () => {
           {/* Center Nav Links */}
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-700">
             <Link to="/dashboard">Dashboard ▾</Link>
-            <Link to="#">Problems ▾</Link>
+            <Link to="/problems">Problems ▾</Link>
             <Link to="#">Sheets ▾</Link>
-            <Link to="#">Discuss ▾</Link>
+            <Link to="/discuss">Discuss ▾</Link>
             <Link to="#">Contests ▾</Link>
           </div>
         </div>
@@ -48,7 +48,7 @@ export const Navbar = () => {
 
         {userData && (
           <div className="flex items-center space-x-4  ">
-            <Link to="/profile">
+            <Link to="/dashboard">
               <img src={avatar} width={30} alt="" />
             </Link>
 

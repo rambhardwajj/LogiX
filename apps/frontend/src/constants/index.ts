@@ -7,7 +7,72 @@ function daysAgo(n: number) {
   d.setDate(d.getDate() - n);
   return d.toISOString();
 }
-export const allSubmission = [
+
+ export  const dummyDonutData = [
+  {
+    id: "Medium",
+    label: "Medium",
+    value: 7,
+    color: "hsl(12, 10%, 50%)",
+  },
+  {
+    id: "Easy",
+    label: "Easy",
+    value: 5,
+    color: "hsl(311, 70%, 50%)",
+  },
+  {
+    id: "Hard",
+    label: "Hard",
+    value: 3,
+    color: "hsl(43, 70%, 50%)",
+  },
+];
+
+export const dummyPieData = [
+  {
+    id: "python",
+    label: "python",
+    value: 3,
+    color: "hsl(132, 70%, 50%)",
+  },
+  {
+    id: "c++",
+    label: "cpp",
+    value: 8,
+    color: "hsl(247, 70%, 50%)",
+  },
+ 
+  {
+    id: "java",
+    label: "java",
+    value: 9,
+    color: "hsl(333, 70%, 50%)",
+  },
+  {
+    id: "javascript",
+    label: "javascript",
+    value: 4,
+    color: "hsl(145, 70%, 50%)",
+  },
+];
+
+export const dummyUserData :any = {
+  data: {
+    avatar: 'https://res.cloudinary.com/dmnh10etf/image/upload/v1750270944/default_epnleu.png',
+    dailyProblemStreak: 3,
+    email: "demo@gmail.com",
+    fullname: "Demo User",
+    githubUrl: "https://github.com/rambhardwajj",
+    xUrl: "https://www.x.com/ram_1010",
+    linkedInUrl: "https://www.linkedin.com/in/bhardwajram",
+    problemSolvedCount: 20, 
+    role: "USER",
+    isVerified: true
+  }
+}
+
+export const dummyAllSubmission = [
   {
     status: "Accepted",
     time: "0.134s",
@@ -16,6 +81,138 @@ export const allSubmission = [
     language: "TypeScript",
     TestCaseResult: [{ testCaseId: 1, passed: true }],
     createdAt: daysAgo(1),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(0),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(161),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(151),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(221),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(191),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(340),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(345),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(325),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(297),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(10),
+    sourceCode: `function add(a: number, b: number): number {
+  return a + b;
+}`,
+  },
+  {
+    status: "Accepted",
+    time: "0.134s",
+    memory: "15.2MB",
+    stdout: "All test cases passed",
+    language: "TypeScript",
+    TestCaseResult: [{ testCaseId: 1, passed: true }],
+    createdAt: daysAgo(2),
     sourceCode: `function add(a: number, b: number): number {
   return a + b;
 }`,
@@ -412,3 +609,4 @@ export const allSubmission = [
     return a / b`,
   },
 ];
+

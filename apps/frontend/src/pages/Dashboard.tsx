@@ -3,64 +3,21 @@ import { Donut } from "../components/animations/Donut";
 import SocialLinks from "../components/SocialLinks";
 import { useUser } from "../hooks";
 
-import { allSubmission } from "../constants";
+import {
+  dummyAllSubmission,
+  dummyDonutData,
+  dummyPieData,
+  dummyUserData,
+} from "../constants";
 import { MyPie } from "../components/animations/Pie";
 
-const donutData = [
-  {
-    id: "Medium",
-    label: "Medium",
-    value: 7,
-    color: "hsl(12, 10%, 50%)",
-  },
-  {
-    id: "Easy",
-    label: "Easy",
-    value: 5,
-    color: "hsl(311, 70%, 50%)",
-  },
-  {
-    id: "Hard",
-    label: "Hard",
-    value: 3,
-    color: "hsl(43, 70%, 50%)",
-  },
-];
-
-const pieData = [
-  
-  {
-    id: "python",
-    label: "python",
-    value: 3,
-    color: "hsl(132, 70%, 50%)",
-  },
-  {
-    id: "c++",
-    label: "cpp",
-    value: 8,
-    color: "hsl(247, 70%, 50%)",
-  },
- 
-  {
-    id: "java",
-    label: "java",
-    value: 9,
-    color: "hsl(333, 70%, 50%)",
-  },
-  {
-    id: "javascript",
-    label: "javascript",
-    value: 4,
-    color: "hsl(145, 70%, 50%)",
-  },
-];
-
 const Dashboard = () => {
-  const { data: userData } = useUser();
+  let { data: userData } = useUser();
   console.log(userData);
-
-  // const totalProblems = 33;
+  if (!userData) {
+    userData = dummyUserData;
+  }
+  const totalProblems = 33;
 
   return (
     <div className="min-h-screen overflow-hidden flex justify-center bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6]  ">
@@ -105,13 +62,40 @@ const Dashboard = () => {
                   <div className="lg:block hidden">
                     <SocialLinks userData={userData} />
                   </div>
+
+                  <div></div>
+
+                  <div className=" flex flex-col justify-center items-center py-7 hover:scale-101 ">
+                    {userData?.data.problemSolvedCount! >= 20 ? (
+                      <div>
+                        <img
+                          src="/badges/gold.png"
+                          alt=""
+                          className="max-w-[7vw]  "
+                        />
+                        
+                      </div>
+                    ) : userData?.data.problemSolvedCount! >= 10 ? (
+                      <img
+                        src="/badges/silver.png"
+                        alt=""
+                        className="max-w-[7vw]  "
+                      />
+                    ) : (
+                      <img
+                        src="/badges/silver.png"
+                        alt=""
+                        className="max-w-[7vw]  "
+                      />
+                    )}
+                  </div>
                 </div>
               )}
 
               {i == 1 && (
                 <div className=" hidden lg:block cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out p-6  pl-10 duration-100  text-left ">
                   <div className="  size-100 py-5 ">
-                    <Donut data={donutData} />
+                    <Donut data={dummyDonutData} />
                   </div>
                 </div>
               )}
@@ -147,14 +131,14 @@ const Dashboard = () => {
               {i == 3 && (
                 <div className=" hidden lg:block cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out duration-100 text-left ">
                   <div className=" inset-0 size-70 py-1 ">
-                    <MyPie data={pieData} />
+                    <MyPie data={dummyPieData} />
                   </div>
                 </div>
               )}
 
               {i == 4 && (
                 <div className=" cursor-pointer relative overflow-hidden rounded-xl  hover:scale-103 ease-in-out duration-100 p-1 text-left ">
-                  <ContributionCalendar submissions={allSubmission} />
+                  <ContributionCalendar submissions={dummyAllSubmission} />
                 </div>
               )}
 

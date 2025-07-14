@@ -11,6 +11,7 @@ import ResendVerification from "./pages/ResendVerification";
 import ForgotPassword from "./pages/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import Try from "./pages/Try";
+import Discuss from "./pages/Discuss";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/try" element={<Try />} />
+          <Route path="/discuss" element={<Discuss />} />
         </Route>
 
         <Route element={<AuthLayout />}>
