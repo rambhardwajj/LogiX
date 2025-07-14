@@ -454,6 +454,7 @@ export const googleLogin: RequestHandler = asyncHandler(async (req, res) => {
 export const updateLinks: RequestHandler = asyncHandler(async (req, res) => {
   const { linkedInUrl, githubUrl, xUrl } = req.body;
 
+  // Validate only provided URLs
   if (
     (linkedInUrl && !isValidUrl(linkedInUrl)) ||
     (githubUrl && !isValidUrl(githubUrl)) ||
@@ -464,9 +465,31 @@ export const updateLinks: RequestHandler = asyncHandler(async (req, res) => {
 
   const { id } = req.user;
 
+  // Fetch current user data
+  const [existingUser] = await db
+    .select({
+      linkedInUrl: users.linkedInUrl,
+      githubUrl: users.githubUrl,
+      xUrl: users.xUrl,
+    })
+    .from(users)
+    .where(eq(users.id, id));
+
+  if (!existingUser) {
+    throw new CustomError(404, "User not found");
+  }
+
+  // Merge provided values with existing ones
+  const updatedLinks = {
+    linkedInUrl: linkedInUrl ?? existingUser.linkedInUrl,
+    githubUrl: githubUrl ?? existingUser.githubUrl,
+    xUrl: xUrl ?? existingUser.xUrl,
+  };
+
+  // Perform the update
   const [updatedUser] = await db
     .update(users)
-    .set({ linkedInUrl, githubUrl, xUrl })
+    .set(updatedLinks)
     .where(eq(users.id, id))
     .returning();
 
