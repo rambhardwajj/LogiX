@@ -15,25 +15,20 @@ const commentSchema = z.object({
 )
 
 
-type CreateDiscussionPost = z.infer<typeof createDiscussionPostSchema>;
+export type CreateDiscussionPost = z.infer<typeof createDiscussionPostSchema>;
 type UpdateDiscussionPost = z.infer<typeof updateDiscussionPostSchema>;
 type AddComment = z.infer<typeof commentSchema>;
 
-const createDiscussionPostValidation = (data: CreateDiscussionPost) => {
+export const createDiscussionPostValidation = (data: CreateDiscussionPost) => {
   return createDiscussionPostSchema.safeParse(data);
 };
 
-const updateDiscussionPostValidation = (data: UpdateDiscussionPost) => {
+export const updateDiscussionPostValidation = (data: UpdateDiscussionPost) => {
   return updateDiscussionPostSchema.safeParse(data);
 };
 
-const addCommentsValidation = (data:AddComment)=>{
+export const addCommentsValidation = (data:AddComment)=>{
     return commentSchema.safeParse(data)
 }
 
 
-export {
-  createDiscussionPostValidation,
-  updateDiscussionPostValidation,
-  addCommentsValidation
-};
