@@ -8,6 +8,66 @@ function daysAgo(n: number) {
   return d.toISOString();
 }
 
+
+import { type Post } from "../types/discuss"; // adjust import based on where your type is defined
+
+export const dummyPosts: Post[] = [
+  {
+    id: "post1",
+    title: "Understanding JavaScript Closures",
+    description: "A deep dive into closures in JavaScript with examples and use cases.",
+    views: 150,
+    tags: ["javascript", "closures", "functions"],
+    commentsCount: 8,
+    upvotes: 25,
+    createdAt: new Date("2024-05-01T10:00:00Z"),
+    updatedAt: new Date("2024-05-02T12:00:00Z"),
+    user: {
+      id: "user1",
+      email: "alice@example.com",
+      fullname: "Alice Johnson",
+      avatar: "https://i.pravatar.cc/150?img=1",
+      createdAt: new Date("2023-08-10T09:00:00Z"),
+    },
+  },
+  {
+    id: "post2",
+    title: "Mastering TypeScript Types",
+    description: "Everything you need to know about TypeScript’s type system.",
+    views: 240,
+    tags: ["typescript", "types", "frontend"],
+    commentsCount: 12,
+    upvotes: 40,
+    createdAt: new Date("2024-06-15T14:30:00Z"),
+    updatedAt: new Date("2024-06-16T10:45:00Z"),
+    user: {
+      id: "user2",
+      email: "bob@example.com",
+      fullname: "Bob Smith",
+      avatar: "https://i.pravatar.cc/150?img=2",
+      createdAt: new Date("2023-09-20T11:15:00Z"),
+    },
+  },
+  {
+    id: "post3",
+    title: "How to Optimize React Performance",
+    description: "Learn best practices and techniques for optimizing React apps.",
+    views: 320,
+    tags: ["react", "performance", "hooks"],
+    commentsCount: 20,
+    upvotes: 70,
+    createdAt: new Date("2024-07-01T08:20:00Z"),
+    updatedAt: new Date("2024-07-03T17:00:00Z"),
+    user: {
+      id: "user3",
+      email: "charlie@example.com",
+      fullname: "Charlie Davis",
+      avatar: "https://i.pravatar.cc/150?img=3",
+      createdAt: new Date("2022-12-01T16:40:00Z"),
+    },
+  },
+];
+
  export  const dummyDonutData = [
   {
     id: "Medium",

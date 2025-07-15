@@ -18,7 +18,7 @@ export const discussion = pgTable(
     upvotes: integer("upvotes").default(0),
     views: integer("views").default(0),
 
-    ...timestamps,
+    ...timestamps
   },
   (table) => [
     {

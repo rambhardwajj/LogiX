@@ -17,7 +17,6 @@ const Dashboard = () => {
   if (!userData) {
     userData = dummyUserData;
   }
-  const totalProblems = 33;
 
   return (
     <div className="min-h-screen overflow-hidden flex justify-center bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6]  ">
@@ -63,29 +62,28 @@ const Dashboard = () => {
                     <SocialLinks userData={userData} />
                   </div>
 
-                  <div></div>
+                 
 
-                  <div className=" flex flex-col justify-center items-center py-7 hover:scale-101 ">
+                <div className=" relative flex  justify-center items-center py-7 hover:scale-101 ">
                     {userData?.data.problemSolvedCount! >= 20 ? (
                       <div>
                         <img
                           src="/badges/gold.png"
                           alt=""
-                          className="max-w-[7vw]  "
+                          className="max-w-[100px] lg:block hidden  "
                         />
-                        
                       </div>
                     ) : userData?.data.problemSolvedCount! >= 10 ? (
                       <img
                         src="/badges/silver.png"
                         alt=""
-                        className="max-w-[7vw]  "
+                        className="max-w-[7vw] lg:block hidden "
                       />
                     ) : (
                       <img
                         src="/badges/silver.png"
                         alt=""
-                        className="max-w-[7vw]  "
+                        className="max-w-[7vw] lg:block hidden "
                       />
                     )}
                   </div>
