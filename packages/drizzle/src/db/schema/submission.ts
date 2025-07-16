@@ -16,7 +16,7 @@ export const submission = pgTable("submissions", {
   stdout: text("stdout"),
   stderr: text("stderr"),
   compileOutput: text("compile_output"),
-  status: text("status").notNull(), // Consider enum if values are fixed
+  status: text("status").notNull(), 
 
   memory: text("memory"),
   time: text("time"),
