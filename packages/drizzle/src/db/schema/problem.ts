@@ -21,7 +21,7 @@ export const problems = pgTable("problems", {
   editorial: jsonb("editorial"),
   examples: jsonb("examples").notNull(),
   constraints: text("constraints").array().notNull(),
-  hints: text("hints").array().notNull(),
+  hints: text("hints").array(),
   codeSnippets: jsonb("code_snippets").notNull(),
   referenceSolutions: jsonb("reference_solutions").notNull(),
   testcases: jsonb("testcases").notNull(),

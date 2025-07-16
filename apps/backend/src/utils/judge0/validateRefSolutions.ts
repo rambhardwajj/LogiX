@@ -20,18 +20,26 @@ export const validateRefSolution = async (
       };
     }
   );
+  try {
+    const tokens = await createBatchSubmissions(submissions);
 
-  const tokens = await createBatchSubmissions(submissions);
-  const results = await pollSubmissionBatchResult(tokens);
+    const results = await pollSubmissionBatchResult(tokens);
 
-  results.forEach((result, idx) => {
-    if (result.status.id !== 3) {
-      const errorMessage =
-        result.stderr || result.compile_output || "No error output";
-      throw new CustomError(
-        400,
-        `Submission ${idx + 1} failed: ${result.status.description} — ${errorMessage}`
-      );
-    }
-  });
+    console.log(results);
+
+    results.forEach((result, idx) => {
+      if (result.status.id !== 3) {
+        const errorMessage =
+          result.stderr || result.compile_output || "No error output";
+        throw new CustomError(
+          400,
+          `Submission ${idx + 1} failed: ${result.status.description} — ${errorMessage}`
+        );
+      }
+    });
+
+    console.log("Submission Accepted")
+  } catch (error) {
+    throw new CustomError(500, "Failed to validate reference solution");
+  }
 };

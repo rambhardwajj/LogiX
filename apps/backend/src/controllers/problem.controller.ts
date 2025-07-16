@@ -41,9 +41,11 @@ export const createProblem: RequestHandler = asyncHandler(
     if (existing)
       throw new CustomError(409, "Problem already exists with the same title");
 
-    referenceSolutions.map((refSol) => {
-      validateRefSolution(refSol.language, refSol.solution, testcases);
-    });
+    await Promise.all(
+      referenceSolutions.map(({ language, solution }) =>
+        validateRefSolution(language, solution, testcases)
+      )
+    );
 
     const [problem] = await db
       .insert(problems)
@@ -85,7 +87,11 @@ export const updateProblem: RequestHandler = asyncHandler(
 
     if (updatePayload.referenceSolutions && updatePayload.testcases) {
       for (const { language, solution } of updatePayload.referenceSolutions) {
-        await validateRefSolution(language, solution, updatePayload.testcases);
+        await Promise.all(
+          updatePayload.referenceSolutions.map(({ language, solution }) =>
+            validateRefSolution(language, solution, updatePayload.testcases!)
+          )
+        );
       }
     } else if (updatePayload.referenceSolutions || updatePayload.testcases) {
       throw new CustomError(
@@ -125,6 +131,7 @@ export const deleteProblem: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const getAllProblems: RequestHandler = asyncHandler(async (req, res) => {
+  console.log("inside getAll");
   const allProblems = await db.select().from(problems);
   return res
     .status(200)
@@ -132,15 +139,15 @@ export const getAllProblems: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const getProblemById: RequestHandler = asyncHandler(async (req, res) => {
+  console.log("Inside get problem by id");
   const { problemId } = req.params;
   if (!problemId) throw new CustomError(404, "ProblemId is required");
   parseUuid(problemId, "Problem");
   const [problem] = await db
     .select()
     .from(problems)
-    .where(eq(problems.id, problemId))
-    
+    .where(eq(problems.id, problemId));
+
   if (!problem) throw new CustomError(404, "Problem does not exists");
   res.status(200).json(new ApiResponse(200, "Problem Retrieved", problem));
 });
-

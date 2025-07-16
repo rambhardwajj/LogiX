@@ -7,12 +7,14 @@ export const createBatchSubmissions = async (
   submissions: Submission[]
 ) => {
   try {
+    console.log("h11")
     const res = await axios.post(
       `${env.JUDGE0_API_URL}/submissions/batch`,
       { submissions },
       {
         headers: {
           "Content-Type": "application/json",
+          // Authorization: `Bearer ${env.JUDGE0_API_KEY}`,
         },
       }
     );

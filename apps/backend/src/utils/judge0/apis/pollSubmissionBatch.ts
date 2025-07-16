@@ -7,8 +7,8 @@ import { sleep } from "../utils";
 export const pollSubmissionBatchResult = async (
   tokens: Token[]
 ): Promise<SubmissionResult[]> => {
-  const interval = 1000; // polling interval in ms
-  const timeout = 10000; // max time to wait in ms
+  const interval = 500; // polling interval in ms
+  const timeout = 5000; // max time to wait in ms
   const startTime = Date.now();
   try {
     while (true) {
@@ -21,6 +21,7 @@ export const pollSubmissionBatchResult = async (
           },
           headers: {
             "Content-Type": "application/json",
+            //  Authorization: `Bearer ${env.JUDGE0_API_KEY}`,
           },
         }
       );
