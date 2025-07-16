@@ -175,11 +175,11 @@ const DiscussCreate = () => {
             )}
           </div>
 
-          <div className=" rounded-md my-4">
+          <div className=" ml-10 rounded-md my-4">
             {topics.map((topic: string, index: number) => (
               <span
                 key={index}
-                className=" ml-10 max  gap-2 p-1  bg-neutral-200 rounded-xl shadow-sm border border-neutral-300"
+                className=" mx-1 max  gap-2 p-1  bg-neutral-200 rounded-xl shadow-sm border border-neutral-300"
               >
                 <span className="text-sm font-medium text-black">{topic}</span>
                 {/* Optional remove button/icon */}
