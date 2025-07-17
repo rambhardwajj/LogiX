@@ -5,7 +5,7 @@ import { CustomError } from "@repo/utils";
 
 export const createBatchSubmissions = async (
   submissions: Submission[]
-) => {
+) : Promise<Token[]>  => {
   try {
     console.log("h11")
     const res = await axios.post(

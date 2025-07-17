@@ -25,7 +25,6 @@ export const validateRefSolution = async (
 
     const results = await pollSubmissionBatchResult(tokens);
 
-    console.log(results);
 
     results.forEach((result, idx) => {
       if (result.status.id !== 3) {

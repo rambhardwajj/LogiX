@@ -8,7 +8,7 @@ export const testCaseResult = pgTable("test_case_results", {
   id: uuid("id").defaultRandom().primaryKey(),
   submissionId: uuid("submission_id").references(() => submission.id, {onDelete: "cascade"} ).notNull(),
 
-  noOfTestCases: integer("no_of_testcases").notNull(),
+  noOfTestCase: integer("no_of_testcases").notNull(),
   passed: boolean("passed").notNull(),
 
   stdout: text("stdout"),
