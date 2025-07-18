@@ -6,6 +6,7 @@ import {
   and,
   comment,
   discussionUpvote,
+  sql,
 } from "@repo/drizzle";
 import { ApiResponse, asyncHandler, CustomError } from "@repo/utils";
 import {
@@ -126,8 +127,8 @@ export const deletePost: RequestHandler = asyncHandler(async (req, res) => {
 });
 
 export const getPostById: RequestHandler = asyncHandler(async (req, res) => {
-  const { postid } = req.params;
-  if (!postid) throw new CustomError(404, "Post Id not found");
+  const postId = req.params.postId;
+  if (!postId) throw new CustomError(404, "Post Id not found");
 
   const postResult = await db
     .select({
@@ -145,7 +146,7 @@ export const getPostById: RequestHandler = asyncHandler(async (req, res) => {
       userAvatar: users.avatar,
     })
     .from(discussion)
-    .where(eq(discussion.id, postid))
+    .where(eq(discussion.id, postId))
     .innerJoin(users, eq(discussion.userId, users.id))
     .limit(1);
 
@@ -169,7 +170,7 @@ export const getPostById: RequestHandler = asyncHandler(async (req, res) => {
       userCreatedAt: users.created_at,
     })
     .from(comment)
-    .where(eq(comment.discussId, postid))
+    .where(eq(comment.discussId, postId))
     .innerJoin(users, eq(comment.userId, users.id));
 
   const comments = rawComments.map((c) => ({
@@ -190,16 +191,16 @@ export const getPostById: RequestHandler = asyncHandler(async (req, res) => {
   const upvotes = await db
     .select({ userId: discussionUpvote.userId })
     .from(discussionUpvote)
-    .where(eq(discussionUpvote.discussionId, postid));
+    .where(eq(discussionUpvote.discussionId, postId));
 
   // 4. Final post structure
   const post = {
     id: postData.id,
     title: postData.title,
     description: postData.description,
-    commentsCount: postData.commentsCount,
-    upvotes: postData.upvotes,
-    views: postData.views,
+    commentsCount: postData.commentsCount!,
+    upvotes: postData.upvotes!,
+    views: postData.views!,
     createdAt: postData.createdAt,
     updatedAt: postData.updatedAt,
     user: {
@@ -261,3 +262,58 @@ export const getAllPosts: RequestHandler = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "All posts fetched", shapedPosts));
 });
 
+export const toggleUpvote: RequestHandler = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  if(!postId) throw new CustomError(404, "Discussion ID is required");
+  const userId = req.user.id; 
+
+  let voted = false
+  // 1. Check if the user has already upvoted this discussion
+  const [existingUpvote] = await db
+    .select()
+    .from(discussionUpvote)
+    .where(
+      and(
+        eq(discussionUpvote.discussionId, postId),
+        eq(discussionUpvote.userId, userId)
+      )
+    )
+    .limit(1);
+
+  if (existingUpvote) {
+    voted = false
+    await db
+      .delete(discussionUpvote)
+      .where(
+        and(
+          eq(discussionUpvote.discussionId, postId),
+          eq(discussionUpvote.userId, userId)
+        )
+      );
+
+    await db
+      .update(discussion)
+      .set({ upvotes: sql`${discussion.upvotes} - 1` })
+      .where(eq(discussion.id, postId!));
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Downvoted successfully", voted));
+
+  } else {
+    voted = true;
+    await db.insert(discussionUpvote).values({
+      userId,
+      discussionId: postId,
+    });
+
+    await db
+      .update(discussion)
+      .set({ upvotes: sql`${discussion.upvotes} + 1` })
+      .where(eq(discussion.id, postId!));
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Upvoted successfully", voted));
+  }
+});

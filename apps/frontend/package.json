@@ -22,6 +22,7 @@
     "@tailwindcss/vite": "^4.1.10",
     "@types/react-calendar-heatmap": "^1.9.0",
     "@types/react-lottie": "^1.2.10",
+    "@uiw/react-markdown-preview": "^5.1.4",
     "@uiw/react-md-editor": "^4.0.7",
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
@@ -43,13 +44,15 @@
     "react-tooltip": "^5.29.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.10",
-    "three": "^0.178.0"
+    "three": "^0.178.0",
+    "turndown": "^7.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.15.32",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.2",
+    "@types/turndown": "^5.0.5",
     "@vitejs/plugin-react": "^4.4.1",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",

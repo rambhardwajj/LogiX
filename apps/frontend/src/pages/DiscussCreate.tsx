@@ -14,20 +14,15 @@ import {
 } from "@repo/ui/components/avatar";
 import { Toast, ToastError, ToastSuccess } from "../utils/ToastContainers";
 import { useUser } from "../hooks";
-// import {type CreateDiscussionPost} from "@repo/zod"
+import type { CreateDiscussionPost } from "@repo/zod"
 import axios from "axios";
-import { BASE_URL } from "../constants";
+import { BASE_URL, DISSCUSS_PATH } from "../constants";
 
 const DiscussCreate = () => {
   const { data: userData, isError } = useUser();
-  const {
-    register,
-    reset,
-    handleSubmit,
-    setValue,
-    watch,
+  const { register, reset, handleSubmit, setValue, watch,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<CreateDiscussionPost>();
   const navigate = useNavigate();
   const [content, setContent] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +51,7 @@ const DiscussCreate = () => {
     setValue("tags", updated);
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: CreateDiscussionPost) => {
     const { title, description, tags } = data;
     if (!title || !content) {
       ToastError("Missing Field Required");
@@ -73,11 +68,11 @@ const DiscussCreate = () => {
     console.log(payload);
     try {
       const res = await axios.post(
-        `${BASE_URL}/api/v1/discuss/create`,
+        `${BASE_URL}${DISSCUSS_PATH}/create/post`,
         {
           title: payload.title,
           description: payload.contentHtml,
-          tags: payload.tags,
+          tags: payload.tags, 
         },
         { withCredentials: true }
       );
@@ -86,7 +81,7 @@ const DiscussCreate = () => {
         ToastSuccess(res.data.message);
         reset();
         handleContentChange("");
-        setTimeout(() => navigate("/discuss"), 2000);
+        setTimeout(() => navigate("/discuss"), 1000);
       }
     } catch (error: any) {
       ToastError(error?.response?.data?.error || "Failed to post");

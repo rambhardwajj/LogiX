@@ -13,6 +13,7 @@ import { ToastContainer } from "react-toastify";
 import Try from "./pages/Try";
 import Discuss from "./pages/Discuss";
 import DiscussCreate from "./pages/DiscussCreate";
+import DiscussUpdatePage from "./pages/DiscussUpdate";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/try" element={<Try />} />
           <Route path="/discuss" element={<Discuss />} />
           <Route path="/discuss/create" element={<DiscussCreate />} />
+          <Route path="/discuss/update/:postId" element={<DiscussUpdatePage />} />
         </Route>
 
         <Route element={<AuthLayout />}>
