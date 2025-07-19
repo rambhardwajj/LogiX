@@ -1,5 +1,4 @@
 import {
-  MessageSquare,
   Eye,
   ThumbsUp,
   SquarePen,
@@ -75,6 +74,7 @@ const DiscussPage = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(`${BASE_URL}${DISSCUSS_PATH}/all`);
 
@@ -86,6 +86,7 @@ const DiscussPage = () => {
     };
 
     fetchPosts();
+    setLoading(false);
   }, []);
 
   const { data: userData } = useUser();
@@ -236,7 +237,7 @@ const DiscussPage = () => {
             <div className="flex  gap-2  px-4">
               {/* Most voted button  */}
               <div
-                className={`flex items-center gap-2 px-4  rounded-lg  border border-neutral-300 ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg  border border-neutral-300 ${
                   activeFilter === "mv"
                     ? "border-blue-500"
                     : "border-neutral-300"
@@ -272,14 +273,16 @@ const DiscussPage = () => {
             </div>
 
             {/* Create Button  */}
-            <div className="">
-              <Button
-                className=" flex items-center gap-2 px-4  hover:bg-violet-200 rounded-lg  border border-neutral-300 cursor-pointer mr-4"
-                onClick={() => navigate("/discuss/create")}
-              >
-                <SquarePen size={18} className="mr-1" /> Create
-              </Button>
-            </div>
+            {userData && (
+              <div className="">
+                <Button
+                  className=" flex items-center gap-2 px-4  hover:bg-violet-200 rounded-lg  border border-neutral-300 cursor-pointer mr-4"
+                  onClick={() => navigate("/discuss/create")}
+                >
+                  <SquarePen size={18} className="mr-1" /> Create
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="min-h-[75vh] flex flex-col md:flex-row gap-3">
@@ -333,25 +336,26 @@ const DiscussPage = () => {
 
                     <div className="ml-13 flex justify-between">
                       <div className="flex items-center gap-4 mt-6 text-sm text-violet-400">
-                        <div
-                          className="flex items-center gap-1 cursor-pointer hover:text-pink-500"
-                          onClick={() => handleUpvote(post.id)}
-                        >
-                          <ThumbsUp
-                            size={12}
-                            className={`${
-                              post.upvotes > 0
-                                ? "text-violet-600 fill-violet-600"
-                                : "text-gray-400"
-                            }`}
-                          />
-                          <span className="text-[12px]">{post.upvotes}</span>
-                        </div>
+                        {userData && (
+                          <div
+                            className="flex items-center gap-1 cursor-pointer hover:text-pink-500"
+                            onClick={() => handleUpvote(post.id)}
+                          >
+                            <ThumbsUp
+                              size={12}
+                              className={`${
+                                post.upvotes > 0
+                                  ? "text-violet-600 fill-violet-600"
+                                  : "text-gray-400"
+                              }`}
+                            />
+                            <span className="text-[12px]">{post.upvotes}</span>
+                          </div>
+                        )}
                         <div className="flex items-center gap-1">
                           <Eye size={12} className="text-violet-400" />
                           <span className="text-[12px]">{post.views}</span>
                         </div>
-                      
                       </div>
                       {post.user.email === userData?.data.email ? (
                         <div className="mt-6 cursor-pointer">

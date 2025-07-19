@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { BASE_URL, DISSCUSS_PATH } from "../constants";
-import { Toast, ToastError, ToastSuccess } from "../utils/ToastContainers";
+import { Toast, ToastError } from "../utils/ToastContainers";
 
 export const DiscussPost = () => {
   const { postId } = useParams();
@@ -50,7 +50,7 @@ export const DiscussPost = () => {
     <>
       <Toast />
       <div className="min-h-screen bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6] p-8 flex justify-center">
-        <div className="max-w-4xl w-full text-white bg-neutral-200 rounded-lg shadow-md p-6">
+        <div className="max-w-4xl w-full text-black bg-white rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)] p-6 ">
           <h1 className="text-3xl font-bold mb-4 text-black">
             {post.title}
           </h1>
