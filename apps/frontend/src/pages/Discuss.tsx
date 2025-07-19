@@ -94,12 +94,12 @@ const DiscussPage = () => {
     try {
       const res = await axios.post(
         `${BASE_URL}${DISSCUSS_PATH}/upvote/post/${postId}`,
-        {}, // <-- no body
+        {},
         {
-          withCredentials: true, // ✅ goes here
+          withCredentials: true,
         }
       );
-      console.log(res.data.data)
+      console.log(res.data.data);
 
       if (res.data.data === true) {
         setPosts((prev) => {
@@ -112,15 +112,17 @@ const DiscussPage = () => {
               : post
           );
         });
-      }else{
-        setPosts((prev) =>{
-          return prev.map((post) => 
-            post.id === postId ? {
-              ...post,
-              upvotes: post.upvotes -1
-            }: post
-          )
-        })
+      } else {
+        setPosts((prev) => {
+          return prev.map((post) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  upvotes: post.upvotes - 1,
+                }
+              : post
+          );
+        });
       }
     } catch (error: any) {
       console.log("upvoting failed ", error);
@@ -180,12 +182,6 @@ const DiscussPage = () => {
     acc[tag].push(post);
     return acc;
   }, {});
-
-  const hasUserUpvoted = (discuss: { userId: string }[]) => {
-    return userData
-      ? discuss.some((post) => post.userId?.includes(userData.data.id))
-      : false;
-  };
 
   return (
     <>
@@ -294,7 +290,7 @@ const DiscussPage = () => {
                   className="bg-white rounded-lg p-3 my-3 border-0 shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
                 >
                   <CardContent className=" ">
-                    <Link to={`/discuss/${post.id}`}>
+                    <Link to={`/discuss/post/${post.id}`}>
                       <div className="flex justify-between">
                         <div className="flex items-center gap-3 mb-2">
                           <Avatar className="h-10 w-10 flex-shrink-0">
@@ -355,17 +351,7 @@ const DiscussPage = () => {
                           <Eye size={12} className="text-violet-400" />
                           <span className="text-[12px]">{post.views}</span>
                         </div>
-                        <Link to={`/discuss/${post.id}`}>
-                          <div className="flex items-center gap-1 cursor-pointer">
-                            <MessageSquare
-                              size={12}
-                              className="text-violet-400"
-                            />
-                            <span className="text-[12px]">
-                              {post.commentsCount}
-                            </span>
-                          </div>
-                        </Link>
+                      
                       </div>
                       {post.user.email === userData?.data.email ? (
                         <div className="mt-6 cursor-pointer">
@@ -413,7 +399,7 @@ const DiscussPage = () => {
                   <div key={idx} className="mb-4">
                     <p className="text-zinc-900 font-medium mb-1">#{tag}</p>
                     {posts.map((post) => (
-                      <Link to={`/discuss/${post.id}`}>
+                      <Link to={`/discuss/post/${post.id}`}>
                         <p
                           key={post.id}
                           className="text-zinc-700 text-sm hover:underline cursor-pointer truncate"

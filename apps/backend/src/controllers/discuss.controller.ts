@@ -264,10 +264,10 @@ export const getAllPosts: RequestHandler = asyncHandler(async (req, res) => {
 
 export const toggleUpvote: RequestHandler = asyncHandler(async (req, res) => {
   const { postId } = req.params;
-  if(!postId) throw new CustomError(404, "Discussion ID is required");
-  const userId = req.user.id; 
+  if (!postId) throw new CustomError(404, "Discussion ID is required");
+  const userId = req.user.id;
 
-  let voted = false
+  let voted = false;
   // 1. Check if the user has already upvoted this discussion
   const [existingUpvote] = await db
     .select()
@@ -281,7 +281,7 @@ export const toggleUpvote: RequestHandler = asyncHandler(async (req, res) => {
     .limit(1);
 
   if (existingUpvote) {
-    voted = false
+    voted = false;
     await db
       .delete(discussionUpvote)
       .where(
@@ -299,7 +299,6 @@ export const toggleUpvote: RequestHandler = asyncHandler(async (req, res) => {
     return res
       .status(200)
       .json(new ApiResponse(200, "Downvoted successfully", voted));
-
   } else {
     voted = true;
     await db.insert(discussionUpvote).values({
@@ -316,4 +315,21 @@ export const toggleUpvote: RequestHandler = asyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "Upvoted successfully", voted));
   }
+});
+
+export const incViews: RequestHandler = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+
+  if (!postId) {
+    throw new CustomError(404, "Post Id not found");
+  }
+
+  await db
+    .update(discussion)
+    .set({ views: sql`${discussion.views} + 1` })
+    .where(eq(discussion.id, postId));
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Views incremented successfully", true));
 });

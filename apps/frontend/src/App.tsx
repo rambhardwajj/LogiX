@@ -14,6 +14,7 @@ import Try from "./pages/Try";
 import Discuss from "./pages/Discuss";
 import DiscussCreate from "./pages/DiscussCreate";
 import DiscussUpdatePage from "./pages/DiscussUpdate";
+import { DiscussPost } from "./pages/DiscussPost";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/discuss" element={<Discuss />} />
           <Route path="/discuss/create" element={<DiscussCreate />} />
           <Route path="/discuss/update/:postId" element={<DiscussUpdatePage />} />
+          <Route path="/discuss/post/:postId" element={<DiscussPost />} />
         </Route>
 
         <Route element={<AuthLayout />}>
