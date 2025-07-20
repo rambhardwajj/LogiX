@@ -42,15 +42,15 @@ import type { Post } from "@/types/discuss";
 
 // import axios from "axios";
 import { useUser } from "../hooks";
-import { BASE_URL, DISSCUSS_PATH, dummyPosts } from "../constants";
+import { BASE_URL, DISSCUSS_PATH } from "../constants";
 import axios from "axios";
 
 const DiscussPage = () => {
-  const [posts, setPosts] = useState<Post[]>(dummyPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
-  let [originalPosts, setOriginalPosts] = useState<Post[]>(dummyPosts);
+  let [originalPosts, setOriginalPosts] = useState<Post[]>([]);
   const [activeFilter, setActiveFilter] = useState<null | "mv" | "lt">(null);
   const [loading, setLoading] = useState(false);
 
@@ -229,7 +229,7 @@ const DiscussPage = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className=" bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6]">
+      <div className=" bg-gradient-to-b from-[#f8f9fb] via-[#edf1f9] to-[#c4bdf6] ">
         <div className=" min-h-screen overflow-hidden max-w-7xl mx-auto  ">
           {/* Header  */}
           <div className=" flex justify-between bg-white rounded-lg p-3 m-3  shadow-[0_3px_10px_rgb(0,0,0,0.2)]">

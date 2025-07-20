@@ -1,4 +1,11 @@
-import { db, eq, problems } from "@repo/drizzle";
+import {
+  db,
+  eq,
+  problemInPlaylist,
+  problems,
+  problemSolved,
+  users,
+} from "@repo/drizzle";
 import {
   ApiResponse,
   asyncHandler,
@@ -151,3 +158,20 @@ export const getProblemById: RequestHandler = asyncHandler(async (req, res) => {
   if (!problem) throw new CustomError(404, "Problem does not exists");
   res.status(200).json(new ApiResponse(200, "Problem Retrieved", problem));
 });
+
+export const getSolvedProblems: RequestHandler = asyncHandler(
+  async (req, res) => {
+    const { userId } = req.params;
+    if (!userId) {
+      throw new CustomError(400, "invalid user Id");
+    }
+
+    const solvedProblems = await db
+      .select()
+      .from(problemSolved)
+      .where(eq(users.id, userId));
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Solved Problems Retrieved", solvedProblems));
+  }
+);

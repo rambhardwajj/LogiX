@@ -15,6 +15,7 @@ import Discuss from "./pages/Discuss";
 import DiscussCreate from "./pages/DiscussCreate";
 import DiscussUpdatePage from "./pages/DiscussUpdate";
 import { DiscussPost } from "./pages/DiscussPost";
+import { Problems } from "./pages/Problems";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/discuss/create" element={<DiscussCreate />} />
           <Route path="/discuss/update/:postId" element={<DiscussUpdatePage />} />
           <Route path="/discuss/post/:postId" element={<DiscussPost />} />
+          <Route path="/problems" element={<Problems />} />
         </Route>
 
         <Route element={<AuthLayout />}>

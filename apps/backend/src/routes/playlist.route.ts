@@ -11,7 +11,7 @@ const router: Router = Router();
 
 router.get("/:playlistId", getPlaylistDetails);
 router.post("/create", isLoggedIn, createPlaylist);
-router.put("/:playlistId", isLoggedIn, updatePlaylist);
+router.patch("/:playlistId", isLoggedIn, updatePlaylist);
 router.delete("/:playlistId", isLoggedIn, deletePlaylist);
 
 export default router;

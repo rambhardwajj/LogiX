@@ -2,6 +2,7 @@ export const BASE_URL = import.meta.env.VITE_API_URL;
 export const AUTH_PATH = "/api/v1/auth";
 export const ADMIN_PATH = "/api/v1/admin";
 export const DISSCUSS_PATH ="/api/v1/discuss"
+export const PROBLEMS_PATH ="/api/v1/problem"
 
 function daysAgo(n: number) {
   const d = new Date();
@@ -10,64 +11,176 @@ function daysAgo(n: number) {
 }
 
 
-import { type Post } from "../types/discuss"; // adjust import based on where your type is defined
 
-export const dummyPosts: Post[] = [
+export const dummyProblems = [
   {
-    id: "post1",
-    title: "Understanding JavaScript Closures",
-    description: "A deep dive into closures in JavaScript with examples and use cases.",
-    views: 150,
-    tags: ["javascript", "closures", "functions"],
-    commentsCount: 8,
-    upvotes: 25,
-    createdAt: new Date("2024-05-01T10:00:00Z"),
-    updatedAt: new Date("2024-05-02T12:00:00Z"),
-    user: {
-      id: "user1",
-      email: "alice@example.com",
-      fullname: "Alice Johnson",
-      avatar: "https://i.pravatar.cc/150?img=1",
-      createdAt: new Date("2023-08-10T09:00:00Z"),
+    id: "problem-1",
+    title: "Two Sum",
+    description: "Find two numbers in an array that add up to a specific target.",
+    difficulty: "easy",
+    tags: ["array", "hashmap"],
+    demo: true,
+    createdBy: "user-1",
+    editorial: {
+      content: "Use a hash map to find complements in O(n) time.",
     },
+    examples: [
+      {
+        input: "nums = [2, 7, 11, 15], target = 9",
+        output: "[0, 1]",
+      },
+    ],
+    constraints: [
+      "2 <= nums.length <= 10^4",
+      "-10^9 <= nums[i], target <= 10^9",
+    ],
+    hints: ["Use a hash map to store the difference."],
+    codeSnippets: {
+      javascript: "function twoSum(nums, target) { /* ... */ }",
+    },
+    referenceSolutions: {
+      javascript: "function twoSum(nums, target) { /* ... */ }",
+    },
+    testcases: [
+      {
+        input: "[2,7,11,15], 9",
+        expectedOutput: "[0,1]",
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    id: "post2",
-    title: "Mastering TypeScript Types",
-    description: "Everything you need to know about TypeScript’s type system.",
-    views: 240,
-    tags: ["typescript", "types", "frontend"],
-    commentsCount: 12,
-    upvotes: 40,
-    createdAt: new Date("2024-06-15T14:30:00Z"),
-    updatedAt: new Date("2024-06-16T10:45:00Z"),
-    user: {
-      id: "user2",
-      email: "bob@example.com",
-      fullname: "Bob Smith",
-      avatar: "https://i.pravatar.cc/150?img=2",
-      createdAt: new Date("2023-09-20T11:15:00Z"),
+    id: "problem-2",
+    title: "Reverse Linked List",
+    description: "Reverse a singly linked list.",
+    difficulty: "easy",
+    tags: ["linked-list"],
+    demo: false,
+    createdBy: "user-2",
+    editorial: {
+      content: "Iteratively reverse pointers of nodes.",
     },
+    examples: [
+      {
+        input: "1 -> 2 -> 3 -> 4 -> 5",
+        output: "5 -> 4 -> 3 -> 2 -> 1",
+      },
+    ],
+    constraints: [
+      "0 <= length <= 5000",
+    ],
+    hints: ["Change next pointers as you iterate."],
+    codeSnippets: {
+      javascript: "function reverseList(head) { /* ... */ }",
+    },
+    referenceSolutions: {
+      javascript: "function reverseList(head) { /* ... */ }",
+    },
+    testcases: [
+      {
+        input: "[1,2,3,4,5]",
+        expectedOutput: "[5,4,3,2,1]",
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
-    id: "post3",
-    title: "How to Optimize React Performance",
-    description: "Learn best practices and techniques for optimizing React apps.",
-    views: 320,
-    tags: ["react", "performance", "hooks"],
-    commentsCount: 20,
-    upvotes: 70,
-    createdAt: new Date("2024-07-01T08:20:00Z"),
-    updatedAt: new Date("2024-07-03T17:00:00Z"),
-    user: {
-      id: "user3",
-      email: "charlie@example.com",
-      fullname: "Charlie Davis",
-      avatar: "https://i.pravatar.cc/150?img=3",
-      createdAt: new Date("2022-12-01T16:40:00Z"),
+    id: "problem-3",
+    title: "Longest Substring Without Repeating Characters",
+    description: "Find the length of the longest substring without repeating characters.",
+    difficulty: "medium",
+    tags: ["string", "sliding-window"],
+    demo: false,
+    createdBy: "user-3",
+    editorial: {
+      content: "Use a sliding window with a Set to track characters.",
     },
+    examples: [
+      {
+        input: '"abcabcbb"',
+        output: "3",
+      },
+    ],
+    constraints: [
+      "0 <= s.length <= 5 * 10^4",
+    ],
+    hints: ["Use sliding window to avoid duplicates."],
+    codeSnippets: {
+      javascript: "function lengthOfLongestSubstring(s) { /* ... */ }",
+    },
+    referenceSolutions: {
+      javascript: "function lengthOfLongestSubstring(s) { /* ... */ }",
+    },
+    testcases: [
+      {
+        input: '"abcabcbb"',
+        expectedOutput: "3",
+      },
+    ],
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
+
+
+// export const dummyPosts: Post[] = [
+//   {
+//     id: "post1",
+//     title: "Understanding JavaScript Closures",
+//     description: "A deep dive into closures in JavaScript with examples and use cases.",
+//     views: 150,
+//     tags: ["javascript", "closures", "functions"],
+//     commentsCount: 8,
+//     upvotes: 25,
+//     createdAt: new Date("2024-05-01T10:00:00Z"),
+//     updatedAt: new Date("2024-05-02T12:00:00Z"),
+//     user: {
+//       id: "user1",
+//       email: "alice@example.com",
+//       fullname: "Alice Johnson",
+//       avatar: "https://i.pravatar.cc/150?img=1",
+//       createdAt: new Date("2023-08-10T09:00:00Z"),
+//     },
+//   },
+//   {
+//     id: "post2",
+//     title: "Mastering TypeScript Types",
+//     description: "Everything you need to know about TypeScript’s type system.",
+//     views: 240,
+//     tags: ["typescript", "types", "frontend"],
+//     commentsCount: 12,
+//     upvotes: 40,
+//     createdAt: new Date("2024-06-15T14:30:00Z"),
+//     updatedAt: new Date("2024-06-16T10:45:00Z"),
+//     user: {
+//       id: "user2",
+//       email: "bob@example.com",
+//       fullname: "Bob Smith",
+//       avatar: "https://i.pravatar.cc/150?img=2",
+//       createdAt: new Date("2023-09-20T11:15:00Z"),
+//     },
+//   },
+//   {
+//     id: "post3",
+//     title: "How to Optimize React Performance",
+//     description: "Learn best practices and techniques for optimizing React apps.",
+//     views: 320,
+//     tags: ["react", "performance", "hooks"],
+//     commentsCount: 20,
+//     upvotes: 70,
+//     createdAt: new Date("2024-07-01T08:20:00Z"),
+//     updatedAt: new Date("2024-07-03T17:00:00Z"),
+//     user: {
+//       id: "user3",
+//       email: "charlie@example.com",
+//       fullname: "Charlie Davis",
+//       avatar: "https://i.pravatar.cc/150?img=3",
+//       createdAt: new Date("2022-12-01T16:40:00Z"),
+//     },
+//   },
+// ];
 
  export  const dummyDonutData = [
   {
