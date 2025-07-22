@@ -16,6 +16,7 @@ import {
   Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import Fuse from "fuse.js";
 
 export const Problems = () => {
   const topicsArray = [
@@ -53,6 +54,19 @@ export const Problems = () => {
       return true;
     }
     return false;
+  };
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProblems, setFilteredProblems] = useState<ProblemDB[]>([]);
+
+  const fuse = new Fuse(problems, {
+    keys: ["title", "tags", "description"],
+    threshold: 0.3,
+  });
+
+  const handleSearch = (searchInp: string) => {
+    const results = fuse.search(searchInp).map(({ item }) => item);
+    setFilteredProblems(results);
   };
 
   useEffect(() => {
@@ -145,6 +159,9 @@ export const Problems = () => {
                 <div className="relative">
                   <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-4  text-neutral-900" />
                   <Input
+                    onChange={(e) => {
+                      handleSearch(e.target.value);
+                    }}
                     placeholder="Search questions"
                     className="pl-8 pr-2 h-6 pt-2  rounded-full  bg-neutral-100  "
                   />
@@ -166,54 +183,62 @@ export const Problems = () => {
                   <div className="relative flex ">
                     <CheckCheck className="text-green-700 pr-1" />
                   </div>
-                  <span className="mr-4"> Solved  {solvedProblemsCount}/{totolProblems} </span>
+                  <span className="mr-4">
+                    {" "}
+                    Solved {solvedProblemsCount}/{totolProblems}{" "}
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)]  flex-grow min-h-[200px] w-full">
-              {problems.map((problem: ProblemDB) => (
-                <div
-                  key={problem.id}
-                  className="bg-neutral-100 justify-between rounded-lg m-2 h-10 flex items-center "
-                >
-                  <div className="flex items-center gap-2 p-2">
-                    <div className="px-3 ">
-                      {isProblemSolved(problem.id) ? (
-                        <CircleCheck className="border-0 font-bold rounded-[50%] text-green-600 size-6 " />
-                      ) : (
-                        <div><CircleCheck className="text-neutral-500" /></div>
-                      )}
-                    </div>
-                    <div className="font-semibold flex ">
-                      <div className="text-sm">{problem.title}</div>
-                      {problem.demo && (
-                        <Badge className="mx-3 bg-teal-500 border-2 border-teal-700 text-white ">
-                          Demo
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-2 p-2">
-                    <div
-                      className={` text-sm font-bold ${problem.difficulty === "EASY" ? "text-green-500" : problem.difficulty === "MEDIUM" ? "text-yellow-500" : "text-red-500"} `}
-                    >
-                      {problem.difficulty}
+            <div className="bg-white rounded-lg shadow-[0_3px_10px_rgb(0,0,0,0.2)]  flex-grow min-h-[200px] w-full">
+              {(filteredProblems.length > 0 ? filteredProblems : problems).map(
+                (problem: ProblemDB) => (
+                  <div
+                    key={problem.id}
+                    className="bg-neutral-100 justify-between rounded-lg m-2 h-10 flex items-center "
+                  >
+                    <div className="flex items-center gap-2 p-2">
+                      <div className="px-3 ">
+                        {isProblemSolved(problem.id) ? (
+                          <CircleCheck className="border-0 font-bold rounded-[50%] text-green-600 size-6 " />
+                        ) : (
+                          <div>
+                            <CircleCheck className="text-neutral-500" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="font-semibold flex ">
+                        <div className="text-sm">{problem.title}</div>
+                        {problem.demo && (
+                          <Badge className="mx-3 bg-teal-500 border-2 border-teal-700 text-white ">
+                            Demo
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 p-2 ">
-                      {isProblemSolved(problem.id) ? (
-                        <Star
-                          className={`cursor-pointer hover:scale-105 text-amber-400 fill-amber-300`}
-                        />
-                      ) : (
-                        <Star
-                          className={`cursor-pointer hover:scale-105 text-amber-400 `}
-                        />
-                      )}
+
+                    <div className="flex items-center gap-2 p-2">
+                      <div
+                        className={` text-sm font-bold ${problem.difficulty === "EASY" ? "text-green-500" : problem.difficulty === "MEDIUM" ? "text-yellow-500" : "text-red-500"} `}
+                      >
+                        {problem.difficulty}
+                      </div>
+                      <div className="flex items-center gap-2 p-2 ">
+                        {isProblemSolved(problem.id) ? (
+                          <Star
+                            className={`cursor-pointer hover:scale-105 text-amber-400 fill-amber-300`}
+                          />
+                        ) : (
+                          <Star
+                            className={`cursor-pointer hover:scale-105 text-amber-400 `}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
         </div>
